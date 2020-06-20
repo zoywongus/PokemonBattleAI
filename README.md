@@ -3,10 +3,15 @@ CS486 AI Project Pokemon Battle Tree Search Algorithms
 
 Pokemon Specs
 
+# Status
+Starting to integrate json files to grab types and moves data. Just a simple skeleton so far. No moves distinguishment/statuses/effects/teams.
+
+Data files based from https://github.com/fonse/pokemon-battle
+
+Backbone skeleton turn based battling and classes from https://github.com/cesaralvrz/Pokemon-Battle-Simulator
 
 
-
-# Some values and translations below to keep track of while working on project
+### Translations to Keep Track?
 Note: all will use level 50 defaults 0EV/0IV so just round down each calculation
 HP: [(2*Base+IV+EV/4+100)*Level/100+10]*Nature
 Everything else: [(2*Base+IV+EV/4)*Level/100+5]*Nature
