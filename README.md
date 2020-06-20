@@ -3,6 +3,13 @@ CS486 AI Project Pokemon Battle Tree Search Algorithms
 
 Pokemon Specs
 
+##How to run simulator
+python3 pokemonsim.py
+Will reorganize things and update CLI interface in the future
+
+##Running AI stuff
+(todo in the future)
+
 # Status
 Updated some special/physical distinguishment. Updated attack damage calculations a bit
 
@@ -40,5 +47,5 @@ fairy 18
 
 
 
-#use damage calculator algorithm
-#Will have secondary effects (burn/paralysis/poison/freeze/sleep/confusion)
+- use damage calculator algorithm
+- Will have secondary effects (burn/paralysis/poison/freeze/sleep/confusion)
