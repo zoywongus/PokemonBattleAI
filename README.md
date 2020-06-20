@@ -4,7 +4,9 @@ CS486 AI Project Pokemon Battle Tree Search Algorithms
 Pokemon Specs
 
 # Status
-Starting to integrate json files to grab types and moves data. Just a simple skeleton so far. No moves distinguishment/statuses/effects/teams.
+Updated some special/physical distinguishment. Updated attack damage calculations a bit
+
+Just a *very very* simple skeleton so far. No moves statuses/effects/teams/crits.
 
 Data files based from https://github.com/fonse/pokemon-battle
 
