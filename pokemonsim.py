@@ -118,23 +118,25 @@ class Pokemon:
             index = int(input('Pick a move: '))
             print(self.name ,"used", movejson[self.moves[index-1]]['name'])
             time.sleep(1)
+            if (random.randint(1,100) > movejson[self.moves[index-1]]['accuracy']) and (movejson[self.moves[index-1]]['damage_class'] != 'non-damaging'):
+                print('The attack missed!')
+            elif (movejson[self.moves[index-1]]['damage_class'] != 'non-damaging'):
+                move_effectiveness = typesjson[str(movejson[self.moves[index-1]]['type'])]['offense'][Pokemon2.types[0]]
+                if len(Pokemon2.types) > 1:
+                    move_effectiveness *= typesjson[str(movejson[self.moves[index-1]]['type'])]['offense'][Pokemon2.types[1]]
 
-            move_effectiveness = typesjson[str(movejson[self.moves[index-1]]['type'])]['offense'][Pokemon2.types[0]]
-            if len(Pokemon2.types) > 1:
-                move_effectiveness *= typesjson[str(movejson[self.moves[index-1]]['type'])]['offense'][Pokemon2.types[1]]
+                # Determine damage taken
+                damage = calculate_damage(self, Pokemon2, movejson[self.moves[index-1]], move_effectiveness)
+                Pokemon2.health = math.floor(Pokemon2.health - damage)
+                Pokemon2.health = max(Pokemon2.health, 0)
 
-            # Determine damage taken
-            damage = calculate_damage(self, Pokemon2, movejson[self.moves[index-1]], move_effectiveness)
-            Pokemon2.health = math.floor(Pokemon2.health - damage)
-            Pokemon2.health = max(Pokemon2.health, 0)
+                time.sleep(.2)
+                print("Did " + str(math.ceil(damage)) + "HP damage!")
 
-            time.sleep(.2)
-            print("Did " + str(math.ceil(damage)) + "HP damage!")
-
-            if  move_effectiveness == 0.5:
-                delay_print(string_2_attack)
-            elif move_effectiveness >= 2:
-                delay_print(string_1_attack)
+                if  move_effectiveness == 0.5:
+                    delay_print(string_2_attack)
+                elif move_effectiveness >= 2:
+                    delay_print(string_1_attack)
 
             time.sleep(1)
             print(self.name ,"health:", self.health)
@@ -153,18 +155,20 @@ class Pokemon:
             index = int(input('Pick a move: '))
             print(Pokemon2.name ,"used", movejson[Pokemon2.moves[index-1]]['name'])
             time.sleep(1)
+            if (random.randint(1,100) > movejson[Pokemon2.moves[index-1]]['accuracy']) and (movejson[Pokemon2.moves[index-1]]['damage_class'] != 'non-damaging'):
+                print('The attack missed!')
+            elif (movejson[Pokemon2.moves[index-1]]['damage_class'] != 'non-damaging'):
+                move_effectiveness = typesjson[str(movejson[Pokemon2.moves[index-1]]['type'])]['offense'][self.types[0]]
+                if len(Pokemon2.types) > 1:
+                    move_effectiveness *= typesjson[str(movejson[Pokemon2.moves[index-1]]['type'])]['offense'][self.types[1]]
 
-            move_effectiveness = typesjson[str(movejson[Pokemon2.moves[index-1]]['type'])]['offense'][self.types[0]]
-            if len(Pokemon2.types) > 1:
-                move_effectiveness *= typesjson[str(movejson[Pokemon2.moves[index-1]]['type'])]['offense'][self.types[1]]
+                # Determinar daño
+                damage = calculate_damage(Pokemon2, self, movejson[Pokemon2.moves[index-1]], move_effectiveness)
+                self.health = math.floor(self.health - damage)
+                self.health = max(self.health, 0)
 
-            # Determinar daño
-            damage = calculate_damage(Pokemon2, self, movejson[Pokemon2.moves[index-1]], move_effectiveness)
-            self.health = math.floor(self.health - damage)
-            self.health = max(self.health, 0)
-
-            time.sleep(.2)
-            print("Did " + str(math.ceil(damage)) + "HP damage!")
+                time.sleep(.2)
+                print("Did " + str(math.ceil(damage)) + "HP damage!")
 
             if  move_effectiveness == 0.5:
                 delay_print(string_2_attack)

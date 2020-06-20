@@ -19,6 +19,12 @@ Data files based from https://github.com/fonse/pokemon-battle
 
 Backbone skeleton turn based battling and classes from https://github.com/cesaralvrz/Pokemon-Battle-Simulator
 
+## Todo
+Ignore PP + Add status for moves + add stat boosting?
+Add speed 
+Then add trainer class for 3v3 - 6v6
+Not too complex (no dig/fly mechanics and maybe no weather?)
+
 
 ### Translations to Keep Track?
 Note: all will use level 50 defaults 0EV/0IV so just round down each calculation
