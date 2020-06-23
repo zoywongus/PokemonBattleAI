@@ -34,6 +34,7 @@ class Status(enum.Enum):
     burn = 4
     freeze = 5
 
+
 def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     critical = weather = burnstatus = other = stab = 1
     crit_chance = 0.0625
@@ -110,16 +111,30 @@ class Pokemon:
 
         return False
 
+    #Checks if specific status condition affects Pokemon. Returns True if status can be applied
+    def check_status_affect(self, status_condition):
+        if not(self.status == Status.none):
+            return False
+        if status_condition == Status.burn and '11' in self.types:
+            return False
+        if status_condition == Status.freeze and '15' in self.types:
+            return False
+        if status_condition == Status.paralysis and '5' in self.types:
+            return False
+        if status_condition == Status.poison and (('4' in self.types) or ('9' in self.types)):
+            return False
+        return True
+
     def get_status_string(self):
-        if self.status = Status.paralysis:
+        if self.status == Status.paralysis:
             return "[PAR]"
-        elif self.status = Status.freeze:
+        elif self.status == Status.freeze:
             return "[FRZ]"
-        elif self.status = Status.burn:
+        elif self.status == Status.burn:
             return "[BRN]"
-        elif self.status = Status.poison:
+        elif self.status == Status.poison:
             return "[PSN]"
-        elif self.status = Status.sleep:
+        elif self.status == Status.sleep:
             return "[SLP]"
         return ""
 
@@ -196,7 +211,7 @@ class Pokemon:
     #applies paralysis and speed change; might need to apply speed change when pokemon exits and re-enters...
     def apply_paralysis(self):
         #can't be paralyzed if already affected by status condition or if ground type
-        if not(self.status == Status.none) or ('5' in self.types):
+        if not(self.check_status_affect()):
             return
         self.status = Status.paralysis
         self.curspeed = self.curspeed * 0.5
@@ -207,10 +222,31 @@ class Pokemon:
         self.status = Status.none
         self.curspeed = self.curspeed * 2
 
+    def apply_sleep(self):
+        if self.check_status_affect():
+            self.status = Status.sleep
+            self.sleep_counter = random.randint(1,3)
+            print(self.name + " has fallen asleep...")
+
+    def apply_poison(self):
+        if self.check_status_affect():
+            self.status = Status.poison
+            print(self.name + " is poisoned!")
+
+    def apply_freeze(self):
+        if self.check_status_affect():
+            self.status = Status.freeze
+            print(self.name + " is frozen!")
+    
+    def apply_burn(self):
+        if self.check_status_affect():
+            self.status = Status.burn
+            print(self.name + " is burned!")
+
     def apply_confusion(self):
         if not(self.confusion):
             self.confusion = True
-            self.confusion_counter = random.randrange(2,5)
+            self.confusion_counter = random.randint(2,5)
             print(self.name + " is confused!")
 
     #Status conditions / confusion may prevent pokemon from attacking
