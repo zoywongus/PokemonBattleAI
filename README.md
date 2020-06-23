@@ -11,17 +11,18 @@ Will reorganize things and update CLI interface in the future
 (todo in the future)
 
 # Status
-Updated some special/physical distinguishment. Updated attack damage calculations a bit
+June 22: Added critical hit chances. Added mechanics for status conditions, and updated turn structuring. Did not fully test status moves yet (still have to update move effects)
+June 19: Updated some special/physical distinguishment. Updated attack damage calculations a bit
 
-Just a *very very* simple skeleton so far. No moves statuses/effects/teams/crits.
+Just a *very very* simple skeleton so far. 
 
 Data files based from https://github.com/fonse/pokemon-battle
 
 Backbone skeleton turn based battling and classes from https://github.com/cesaralvrz/Pokemon-Battle-Simulator
 
 ## Todo
-Ignore PP + Add status for moves + add stat boosting?
-Add speed 
+Add speed !!!
+Add additional move effects
 Then add trainer class for 3v3 - 6v6
 Not too complex (no dig/fly mechanics and maybe no weather?)
 
