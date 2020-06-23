@@ -11,9 +11,10 @@ string_1_attack = 'Its super effective!\n'
 string_2_attack = 'Its not very effective...\n'
 
 #effects number of moves
-recoil_moves_list = [49, 199, 254, 263, 270]
+recoil_moves_list = [49, 199, 254, 255, 263, 270]
 weight_moves_list = [197,292]
 heal_moves_list = [4, 348, 353]
+confusion_moves_list = [77, 268, 338]
 
 # def make_effect_class():
 
@@ -32,7 +33,6 @@ class Status(enum.Enum):
     burn = 4
     freeze = 5
 
-##TODO ADD ACCURACY STUFF
 def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     critical = weather = burnstatus = other = stab = 1
     crit_chance = 0.0625
@@ -59,7 +59,11 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
         stab = 1.5
 
     if move_info['effect'] in weight_moves_list:
-        power = Pokemon1.calculate_weight_power(Pokemon2, str(move_info['effect']))
+        power = Pokemon1.calculate_weight_power(Pokemon2, move_info['effect'])
+    elif move_info['effect'] == 255: #struggle
+        move_effectiveness = 1
+    elif move_info['effect'] == 318: #acrobatics
+        power *= 2
 
     modifier = weather * critical * burnstatus * (random.randint(85,100)*0.01) * stab * move_effectiveness * other
     damage = (((22*power*attack/defense) / 50) + 2) * modifier
@@ -107,14 +111,14 @@ class Pokemon:
 
     def calculate_recoil_damage(self, damage, move_effect):
         hurt = 0
-        if move_effect == '49':
+        if move_effect == 49 or move_effect == 255:
             hurt = math.floor(damage / 4)
-        elif move_effect == '199' or move_effect == '254' or move_effect == '263':
+        elif move_effect == 199 or move_effect == 254 or move_effect == 263:
             hurt = math.floor(damage / 3)
-        elif move_effect == '270':
+        elif move_effect == 270:
             hurt = math.floor(damage / 2)
+
         self.health -= hurt
-        
         print(self.name + " was hurt " + str(hurt) + "HP (" + str(100*hurt/self.health) + "%)by recoil!")
 
     def calculate_weight_power(self, Pokemon2, move_effect):
@@ -158,6 +162,11 @@ class Pokemon:
             self.curhealth += healhp
             print(self.name + " healed " + str(healhp) + "HP (" + str(math.floor(100*healhp/self.health)) + "%)")
 
+    def calculate_recoil_on_miss(self):
+        recoil = min(math.floor(self.health/2), self.curhealth)
+        self.health -= recoil
+        print(self.name + " kept on going and crashed for " + str(recoil) + " HP (" + str(100*recoil/self.health) + ") recoil damage!")
+
     def apply_status_damage(self):
         if self.status == Status.poison:
             print(self.name + " took damage from poison.")
@@ -178,6 +187,12 @@ class Pokemon:
     def unapply_paralysis(self):
         self.status = Status.none
         self.curspeed = self.curspeed * 2
+
+    def apply_confusion(self):
+        if not(self.confusion):
+            self.confusion = True
+            self.confusion_counter = random.randrange(2,5)
+            print(self.name + " is confused!")
 
     #Status conditions / confusion may prevent pokemon from attacking
     def check_attack_status(self, move):
@@ -208,7 +223,7 @@ class Pokemon:
 
         if self.confusion:
             if self.confusion_counter == 0:
-                self.status = Status.none
+                self.confusion = False
                 print(self.name + " has snapped out of confusion!")
                 return True
             print(self.name + " is confused!")
@@ -217,47 +232,55 @@ class Pokemon:
             if random.random() <= 0.50:
                 return True
             damage = (((22*40*self.curattack/self.curdefense) / 50) + 2) * (random.randint(85,100)*0.01)
-            self.curhealth -= damage
-            print(self.name + " has hurt itself in confusion!")
+            self.curhealth -= math.floor(damage)
+            print(self.name + " has hurt itself in confusion! (" + str(damage) + "HP)")
             return False
 
         return True
     
     def attack_move(self, Pokemon2, index):
         #####self.attack(Pokemon2)
-            print(self.name ,"used", movejson[self.moves[index-1]]['name'])
+            move_used = movejson[self.moves[index-1]]
+            print(self.name ,"used", move_used['name'])
             time.sleep(1)
-            if (random.randint(1,100) > movejson[self.moves[index-1]]['accuracy']) and (movejson[self.moves[index-1]]['damage_class'] != 'non-damaging'):
+            #move effect 18 are attacks that don't miss
+            if (random.randint(1,100) > move_used['accuracy']) and (move_used['damage_class'] != 'non-damaging') and not(move_used['effect'] == 18):
                 print('The attack missed!')
-            elif (movejson[self.moves[index-1]]['damage_class'] != 'non-damaging'):
-                move_effectiveness = typesjson[str(movejson[self.moves[index-1]]['type'])]['offense'][Pokemon2.types[0]]
+                if move_used['effect'] == 46:
+                    self.calculate_recoil_on_miss()
+
+            elif (move_used['damage_class'] != 'non-damaging'):
+                move_effectiveness = typesjson[str(move_used['type'])]['offense'][Pokemon2.types[0]]
                 if len(Pokemon2.types) > 1: #compound effectiveness if target has 2 types
-                    move_effectiveness *= typesjson[str(movejson[self.moves[index-1]]['type'])]['offense'][Pokemon2.types[1]]
+                    move_effectiveness *= typesjson[str(move_used['type'])]['offense'][Pokemon2.types[1]]
 
                 # Determine damage taken
-                damage = calculate_damage(self, Pokemon2, movejson[self.moves[index-1]], move_effectiveness)
+                damage = calculate_damage(self, Pokemon2, move_used, move_effectiveness)
                 Pokemon2.curhealth = math.floor(Pokemon2.curhealth - damage)
                 Pokemon2.curhealth = max(Pokemon2.curhealth, 0)
 
                 time.sleep(.2)
-                if (move_effectiveness == 0):
+                if (damage < 1):
                     print("Move had no effect...")
                     return
                 else:
                     print("Did " + str(math.ceil(damage)) + "HP damage!")
-                    if  move_effectiveness == 0.5:
+                    if  move_effectiveness > 0 and move_effectiveness < 1:
                         delay_print(string_2_attack)
-                    elif move_effectiveness >= 2:
+                    elif move_effectiveness > 1:
                         delay_print(string_1_attack)
 
                 #recoil damage moves
-                if int(movejson[self.moves[index-1]]['effect']) in recoil_moves_list:
-                    self.calculate_recoil_damage(damage, movejson[self.moves[index-1]]['effect'])
-                elif int(movejson[self.moves[index-1]]['effect']) in heal_moves_list:
-                    self.calculate_heal(damage, movejson[self.moves[index-1]]['effect'])
-
+                if int(move_used['effect']) in recoil_moves_list:
+                    self.calculate_recoil_damage(damage, move_used['effect'])
+                elif int(move_used['effect']) in heal_moves_list:
+                    self.calculate_heal(damage, move_used['effect'])
+                #Confusion
+                if move_used['effect'] in confusion_moves_list:
+                    if random.random()*100 < move_used['effect_chance']:
+                        Pokemon2.apply_confusion()
                 #fire type damaging moves defrost
-                if movejson[self.moves[index-1]]['type'] == 10 and Pokemon2.status == Status.freeze:
+                if move_used['type'] == 10 and Pokemon2.status == Status.freeze:
                     Pokemon2.status = Status.none
                     print(Pokemon2.name + " is defrosted!")
 
@@ -361,7 +384,7 @@ if __name__ == '__main__':
     Charizard = Pokemon('6', ['10', '3'], ['53', '19', '307', '7'], {'HP':138, 'ATTACK':89, 'DEFENSE':83, 'SPATTACK':114, 'SPDEFENSE':90, 'SPEED':105})
     Squirtle = Pokemon('7', ['11'], ['61', '33', '29', '57'],{'HP':104, 'ATTACK':53, 'DEFENSE':70, 'SPATTACK':55, 'SPDEFENSE':69, 'SPEED':48})
     Wartortle = Pokemon('8', ['11'], ['61', '55', '29', '57'],{'HP':119, 'ATTACK':68, 'DEFENSE':85, 'SPATTACK':70, 'SPDEFENSE':85, 'SPEED':63})
-    Blastoise = Pokemon('9', ['11'], ['480', '87', '56', '57'],{'HP':139, 'ATTACK':88, 'DEFENSE':105, 'SPATTACK':90, 'SPDEFENSE':110, 'SPEED':83})
+    Blastoise = Pokemon('9', ['11'], ['223', '87', '56', '57'],{'HP':139, 'ATTACK':88, 'DEFENSE':105, 'SPATTACK':90, 'SPDEFENSE':110, 'SPEED':83})
 
 
     

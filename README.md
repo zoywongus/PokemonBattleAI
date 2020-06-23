@@ -11,6 +11,7 @@ Will reorganize things and update CLI interface in the future
 (todo in the future)
 
 # Status
+June 23: Added confusion effects to moves. Mechanics for acrobatics/struggle implemented. Implemented recoil-on-miss mechanics. Confusion moves and mechanics seem to be working.
 June 22: Added critical hit chances. Added mechanics for status conditions, and updated turn structuring. Did not fully test status moves yet (still have to update move effects)
 June 19: Updated some special/physical distinguishment. Updated attack damage calculations a bit
 
