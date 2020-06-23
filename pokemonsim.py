@@ -15,6 +15,7 @@ recoil_moves_list = [49, 199, 254, 255, 263, 270]
 weight_moves_list = [197,292]
 heal_moves_list = [4, 348, 353]
 confusion_moves_list = [77, 268, 338]
+flinch_moves_list = [32, 147, 151]
 
 # def make_effect_class():
 
@@ -93,7 +94,7 @@ class Pokemon:
         self.spdefense = self.curspdefense = EVs['SPDEFENSE']
         self.speed = self.curspeed = EVs['SPEED']
         self.health = self.curhealth = EVs['HP']
-        self.confusion = False
+        self.confusion = self.flinch = False
         self.status = Status.none
         self.sleep_counter = self.confusion_counter = 0
 
@@ -108,6 +109,19 @@ class Pokemon:
             return True
 
         return False
+
+    def get_status_string(self):
+        if self.status = Status.paralysis:
+            return "[PAR]"
+        elif self.status = Status.freeze:
+            return "[FRZ]"
+        elif self.status = Status.burn:
+            return "[BRN]"
+        elif self.status = Status.poison:
+            return "[PSN]"
+        elif self.status = Status.sleep:
+            return "[SLP]"
+        return ""
 
     def calculate_recoil_damage(self, damage, move_effect):
         hurt = 0
@@ -175,6 +189,10 @@ class Pokemon:
             print(self.name + " took damage from burn.")
             self.curhealth -= math.floor(self.health / 16)
 
+    def unapply_status_ailment(self):
+        self.status = Status.none
+        print(self.name + "'s status is restored")
+    
     #applies paralysis and speed change; might need to apply speed change when pokemon exits and re-enters...
     def apply_paralysis(self):
         #can't be paralyzed if already affected by status condition or if ground type
@@ -182,6 +200,7 @@ class Pokemon:
             return
         self.status = Status.paralysis
         self.curspeed = self.curspeed * 0.5
+        print(self.name + " is paralyzed! It may not be able to move!")
     
     #unapplies paralysis/speed change
     def unapply_paralysis(self):
@@ -196,6 +215,10 @@ class Pokemon:
 
     #Status conditions / confusion may prevent pokemon from attacking
     def check_attack_status(self, move):
+        if self.flinch:
+            self.flinch = False
+            print(self.name + " flinched!")
+            return False
         if self.status == Status.sleep:
             if self.sleep_counter == 0:
                 self.status = Status.none
@@ -244,7 +267,7 @@ class Pokemon:
             print(self.name ,"used", move_used['name'])
             time.sleep(1)
             #move effect 18 are attacks that don't miss
-            if (random.randint(1,100) > move_used['accuracy']) and (move_used['damage_class'] != 'non-damaging') and not(move_used['effect'] == 18):
+            if (random.randint(1,100) > move_used['accuracy']) and (move_used['damage_class'] != 'non-damaging') and not(move_used['effect'] == 18) and not(move_used['effect'] == 79):
                 print('The attack missed!')
                 if move_used['effect'] == 46:
                     self.calculate_recoil_on_miss()
@@ -279,6 +302,10 @@ class Pokemon:
                 if move_used['effect'] in confusion_moves_list:
                     if random.random()*100 < move_used['effect_chance']:
                         Pokemon2.apply_confusion()
+                #flinch
+                if move_used['effect'] in flinch_moves_list:
+                    if random.random()*100 < move_used['effect_chance']:
+                        Pokemon2.flinch = True
                 #fire type damaging moves defrost
                 if move_used['type'] == 10 and Pokemon2.status == Status.freeze:
                     Pokemon2.status = Status.none
@@ -318,19 +345,21 @@ class Pokemon:
         # Bucle while mientras tengan vida cada Pokémon
         turn_number = 0
         while (self.curhealth > 0) and (Pokemon2.curhealth > 0):
+            #increment turn number; no Pokemon are flinched in the beginning
             turn_number += 1
+            self.flinch = Pokemon2.flinch = False
 
-            # Imprimir la vida de cada Pokémon
+            # Print turn and pokemon info
             print("_____TURN #" + str(turn_number) + "_____")
             print(self.name ,"health:", self.curhealth)
             print(Pokemon2.name ,"health:", Pokemon2.curhealth)
 
-            print("\nMoves for " + self.name)
+            print("\nMoves for " + self.name + " " + self.get_status_string())
             for i, x in enumerate(self.moves):
                 print(i+1, movejson[x]['name'])
             index = int(input('Pick a move: '))
 
-            print("\nMoves for " + Pokemon2.name)
+            print("\nMoves for " + Pokemon2.name + " " + Pokemon2.get_status_string())
             for i, x in enumerate(Pokemon2.moves):
                 print(i+1, movejson[x]['name'])
             index2 = int(input('Pick a move: '))
