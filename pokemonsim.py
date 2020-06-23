@@ -10,6 +10,11 @@ movejson = typesjson = pokemonjson = {}
 string_1_attack = 'Its super effective!\n'
 string_2_attack = 'Its not very effective...\n'
 
+#effects number of moves
+recoil_moves_list = [49, 199, 254, 263, 270]
+weight_moves_list = [197,292]
+heal_moves_list = [4, 348, 353]
+
 # def make_effect_class():
 
 
@@ -52,6 +57,9 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
    
     if move_info['type'] in pokemonjson[Pokemon1.id]['types']:
         stab = 1.5
+
+    if move_info['effect'] in weight_moves_list:
+        power = Pokemon1.calculate_weight_power(Pokemon2, str(move_info['effect']))
 
     modifier = weather * critical * burnstatus * (random.randint(85,100)*0.01) * stab * move_effectiveness * other
     damage = (((22*power*attack/defense) / 50) + 2) * modifier
@@ -96,6 +104,59 @@ class Pokemon:
             return True
 
         return False
+
+    def calculate_recoil_damage(self, damage, move_effect):
+        hurt = 0
+        if move_effect == '49':
+            hurt = math.floor(damage / 4)
+        elif move_effect == '199' or move_effect == '254' or move_effect == '263':
+            hurt = math.floor(damage / 3)
+        elif move_effect == '270':
+            hurt = math.floor(damage / 2)
+        self.health -= hurt
+        
+        print(self.name + " was hurt " + str(hurt) + "HP (" + str(100*hurt/self.health) + "%)by recoil!")
+
+    def calculate_weight_power(self, Pokemon2, move_effect):
+        pokemon1_weight = pokemonjson[self.id]['weight']
+        pokemon2_weight = pokemonjson[Pokemon2.id]['weight']
+        if move_effect == 197: #only depends defender weight
+            if pokemon2_weight < 10:
+                return 20
+            elif pokemon2_weight < 25:
+                return 40
+            elif pokemon2_weight < 50:
+                return 60
+            elif pokemon2_weight < 100:
+                return 80
+            elif pokemon2_weight < 200:
+                return 100
+            else:
+                return 200
+        else:
+            relative = pokemon2_weight / pokemon1_weight #move_effect == 292 relative weight
+            if relative <= 0.20:
+                return 120
+            elif relative <= 0.25:
+                return 100
+            elif relative <= 33.34:
+                return 80
+            elif relative <= 0.5:
+                return 60
+            else:
+                return 40
+
+    def calculate_heal(self, damage, move_effect):
+        healhp = math.floor(damage * 0.5)
+        if move_effect == 353:
+            healhp = math.floor(damage * 0.75)
+        
+        healhp = min(self.health - self.curhealth, healhp) #can't go above max health
+        if healhp == 0:
+            return
+        else:
+            self.curhealth += healhp
+            print(self.name + " healed " + str(healhp) + "HP (" + str(math.floor(100*healhp/self.health)) + "%)")
 
     def apply_status_damage(self):
         if self.status == Status.poison:
@@ -179,14 +240,21 @@ class Pokemon:
                 Pokemon2.curhealth = max(Pokemon2.curhealth, 0)
 
                 time.sleep(.2)
-                if (damage < 1):
+                if (move_effectiveness == 0):
                     print("Move had no effect...")
+                    return
                 else:
                     print("Did " + str(math.ceil(damage)) + "HP damage!")
                     if  move_effectiveness == 0.5:
                         delay_print(string_2_attack)
                     elif move_effectiveness >= 2:
                         delay_print(string_1_attack)
+
+                #recoil damage moves
+                if int(movejson[self.moves[index-1]]['effect']) in recoil_moves_list:
+                    self.calculate_recoil_damage(damage, movejson[self.moves[index-1]]['effect'])
+                elif int(movejson[self.moves[index-1]]['effect']) in heal_moves_list:
+                    self.calculate_heal(damage, movejson[self.moves[index-1]]['effect'])
 
                 #fire type damaging moves defrost
                 if movejson[self.moves[index-1]]['type'] == 10 and Pokemon2.status == Status.freeze:
@@ -287,7 +355,7 @@ if __name__ == '__main__':
     # Creamos cada Pokémon
     Bulbasaur = Pokemon('1', ['12'], ['22', '75', '33', '73'],{'HP':105, 'ATTACK':54, 'DEFENSE':54, 'SPATTACK':70, 'SPDEFENSE':70, 'SPEED':50})
     Ivysaur = Pokemon('2', ['12'], ['22', '75', '331', '73'],{'HP':120, 'ATTACK':67, 'DEFENSE':68, 'SPATTACK':85, 'SPDEFENSE':85, 'SPEED':65})
-    Venusaur = Pokemon('3', ['12', '4'], ['22', '2', '89', '338'],{'HP':140, 'ATTACK':87, 'DEFENSE':88, 'SPATTACK':105, 'SPDEFENSE':105, 'SPEED':85})
+    Venusaur = Pokemon('3', ['12', '4'], ['22', '202', '89', '338'],{'HP':140, 'ATTACK':87, 'DEFENSE':88, 'SPATTACK':105, 'SPDEFENSE':105, 'SPEED':85})
     Charmander = Pokemon('4', ['10'], ['52', '10', '33', '7'],{'HP':99, 'ATTACK':57, 'DEFENSE':48, 'SPATTACK':65, 'SPDEFENSE':55, 'SPEED':70})
     Charmeleon = Pokemon('5', ['10'], ['52', '10', '53', '7'],{'HP':118, 'ATTACK':69, 'DEFENSE':63, 'SPATTACK':85, 'SPDEFENSE':70, 'SPEED':85})
     Charizard = Pokemon('6', ['10', '3'], ['53', '19', '307', '7'], {'HP':138, 'ATTACK':89, 'DEFENSE':83, 'SPATTACK':114, 'SPDEFENSE':90, 'SPEED':105})
