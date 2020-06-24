@@ -13,9 +13,13 @@ Move numbers found in `moves.json`, Pokemon numbers found `pokemon.json`. Venusa
 
 # Status
 June 24: 1v1 battling works (some move effects not implemented yet - still need more tests). Added some Pokemon to test around. Level 50 stats now automatically calculated for each Pokemon. 
+
 Junw 23 (II): Status moves should be fully implemented now. Stat boosting moves should be fully implemented. Basic 1v1 mechanics should be complete. Basic non-damaging moves not in effect yet. Maybe test a bit more
+
 June 23: Added confusion effects to moves. Mechanics for acrobatics/struggle implemented. Implemented recoil-on-miss mechanics. Confusion moves and mechanics seem to be working.
+
 June 22: Added critical hit chances. Added mechanics for status conditions, and updated turn structuring. Did not fully test status moves yet (still have to update move effects)
+
 June 19: Updated some special/physical distinguishment. Updated attack damage calculations a bit
 
 Just a *very very* simple skeleton so far. 
