@@ -564,5 +564,5 @@ if __name__ == '__main__':
         
     
 
-
-    Venusaur.fight(Mewtwo) # Empezar batalla
+    #battle configuration
+    Venusaur.fight(Mewtwo) 

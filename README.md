@@ -4,13 +4,15 @@ CS486 AI Project Pokemon Battle Tree Search Algorithms
 Pokemon Specs
 
 ##How to run simulator
-python3 pokemonsim.py
-Will reorganize things and update CLI interface in the future
+Do `python3 pokemonsim.py`. Also at the bottom of script, you can add your own or use the pre-made Pokemons (change `[POKEMON1OBJECT].fight([POKEMON2OBJECT])`).
+Move numbers found in `moves.json`, Pokemon numbers found `pokemon.json`. Venusaur.fight(Mewtwo).
+
 
 ##Running AI stuff
 (todo in the future)
 
 # Status
+June 24: 1v1 battling works (some move effects not implemented yet - still need more tests). Added some Pokemon to test around. Level 50 stats now automatically calculated for each Pokemon. 
 Junw 23 (II): Status moves should be fully implemented now. Stat boosting moves should be fully implemented. Basic 1v1 mechanics should be complete. Basic non-damaging moves not in effect yet. Maybe test a bit more
 June 23: Added confusion effects to moves. Mechanics for acrobatics/struggle implemented. Implemented recoil-on-miss mechanics. Confusion moves and mechanics seem to be working.
 June 22: Added critical hit chances. Added mechanics for status conditions, and updated turn structuring. Did not fully test status moves yet (still have to update move effects)
@@ -30,9 +32,6 @@ Not too complex (no dig/fly mechanics and maybe no weather?)
 
 ### Translations to Keep Track?
 Note: all will use level 50 defaults 0EV/0IV so just round down each calculation
-HP: [(2*Base+IV+EV/4+100)*Level/100+10]*Nature
-Everything else: [(2*Base+IV+EV/4)*Level/100+5]*Nature
-
 
 normal 1
 fighting 2
@@ -52,8 +51,3 @@ ice 15
 dragon 16
 dark 17
 fairy 18
-
-
-
-- use damage calculator algorithm
-- Will have secondary effects (burn/paralysis/poison/freeze/sleep/confusion)
