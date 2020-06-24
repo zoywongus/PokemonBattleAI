@@ -37,6 +37,16 @@ class Status(enum.Enum):
     burn = 4
     freeze = 5
 
+def convert(basestats, level=50):
+    s = {
+        "hp": int(((2 * basestats['hp'] + 100) * level / 100)+10),
+        "attack": int(((2 * basestats['attack']) * level / 100)+5),
+        "defense": int(((2 * basestats['defense']) * level / 100)+5),
+        "spattack": int(((2 * basestats['spattack']) * level / 100)+5),
+        "spdefense": int(((2 * basestats['spdefense']) * level / 100)+5),
+        "speed": int(((2 * basestats['speed']) * level / 100)+5)
+    }
+    return s
 
 def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     critical = weather = burnstatus = other = stab = 1
@@ -85,19 +95,21 @@ def delay_print(s):
 
 # Creation Pokemon
 class Pokemon:
-    def __init__(self, nameid, types, moves, EVs): #EVs is placeholder for lvl50 stats for now
+    def __init__(self, nameid, moves):
         # Guardar variables como atributos
         self.id = nameid
         self.name = pokemonjson[nameid]['name']
         self.types = pokemonjson[nameid]['types']
         self.moves = moves
+        basestats = pokemonjson[nameid]['stats']
+        level50stats = convert(basestats)
         #set base stats
-        self.attack = self.curattack = EVs['ATTACK']
-        self.spattack = self.curspattack = EVs['SPATTACK']
-        self.defense = self.curdefense = EVs['DEFENSE']
-        self.spdefense = self.curspdefense = EVs['SPDEFENSE']
-        self.speed = self.curspeed = EVs['SPEED']
-        self.health = self.curhealth = EVs['HP']
+        self.attack = self.curattack = level50stats['attack']
+        self.spattack = self.curspattack = level50stats['spattack']
+        self.defense = self.curdefense = level50stats['defense']
+        self.spdefense = self.curspdefense = level50stats['spdefense']
+        self.speed = self.curspeed = level50stats['speed']
+        self.health = self.curhealth = level50stats['hp']
         self.confusion = self.flinch = False
         self.status = Status.none
         self.sleep_counter = self.confusion_counter = 0
@@ -527,16 +539,25 @@ if __name__ == '__main__':
         pokemonjson = json.load(json_file) 
 
 
-    # Creamos cada Pokémon
-    Bulbasaur = Pokemon('1', ['12'], ['22', '75', '33', '73'],{'HP':105, 'ATTACK':54, 'DEFENSE':54, 'SPATTACK':70, 'SPDEFENSE':70, 'SPEED':50})
-    Ivysaur = Pokemon('2', ['12'], ['22', '75', '331', '73'],{'HP':120, 'ATTACK':67, 'DEFENSE':68, 'SPATTACK':85, 'SPDEFENSE':85, 'SPEED':65})
-    Venusaur = Pokemon('3', ['12', '4'], ['98', '202', '305', '331'],{'HP':1140, 'ATTACK':87, 'DEFENSE':88, 'SPATTACK':105, 'SPDEFENSE':105, 'SPEED':85})
-    Charmander = Pokemon('4', ['10'], ['52', '10', '33', '7'],{'HP':99, 'ATTACK':57, 'DEFENSE':48, 'SPATTACK':65, 'SPDEFENSE':55, 'SPEED':70})
-    Charmeleon = Pokemon('5', ['10'], ['52', '10', '53', '7'],{'HP':118, 'ATTACK':69, 'DEFENSE':63, 'SPATTACK':85, 'SPDEFENSE':70, 'SPEED':85})
-    Charizard = Pokemon('6', ['10', '3'], ['53', '19', '307', '7'], {'HP':138, 'ATTACK':89, 'DEFENSE':83, 'SPATTACK':114, 'SPDEFENSE':90, 'SPEED':105})
-    Squirtle = Pokemon('7', ['11'], ['61', '33', '29', '57'],{'HP':104, 'ATTACK':53, 'DEFENSE':70, 'SPATTACK':55, 'SPDEFENSE':69, 'SPEED':48})
-    Wartortle = Pokemon('8', ['11'], ['61', '55', '29', '57'],{'HP':119, 'ATTACK':68, 'DEFENSE':85, 'SPATTACK':70, 'SPDEFENSE':85, 'SPEED':63})
-    Blastoise = Pokemon('9', ['11'], ['221', '87', '305', '206'],{'HP':1139, 'ATTACK':88, 'DEFENSE':105, 'SPATTACK':90, 'SPDEFENSE':110, 'SPEED':83})
+    # Sample Pokemon to use (damaging moves only for now)
+    Bulbasaur = Pokemon('1', ['22', '75', '33', '73'])
+    Ivysaur = Pokemon('2', ['22', '75', '331', '73'])
+    Venusaur = Pokemon('3', ['188', '202', '34', '89'])
+    Charmander = Pokemon('4', ['52', '10', '33', '411'])
+    Charmeleon = Pokemon('5', ['52', '10', '53', '7'])
+    Charizard = Pokemon('6', ['89', '394', '337', '411'])
+    Squirtle = Pokemon('7', ['61', '33', '29', '57'])
+    Wartortle = Pokemon('8', ['61', '55', '29', '57'])
+    Blastoise = Pokemon('9', ['399', '396', '58', '56'])
+
+    Zubat = Pokemon('41', ['44', '305', '17', '141'])
+    Gengar = Pokemon('94', ['399', '247', '85', '412'])
+    Pikachu = Pokemon('25', ['344', '98', '231', '435'])
+    Pidgeot = Pokemon('18', ['542', '257', '211', '98'])
+    Beedrill = Pokemon('15', ['398', '529', '280', '41'])
+    Machamp = Pokemon('68', ['370', '418', '9', '8'])
+    Snorlax = Pokemon('143', ['38', '89', '7', '484'])
+    Mewtwo = Pokemon('150', ['94', '411', '126', '247'])
 
 
     
@@ -544,4 +565,4 @@ if __name__ == '__main__':
     
 
 
-    Venusaur.fight(Blastoise) # Empezar batalla
+    Venusaur.fight(Mewtwo) # Empezar batalla

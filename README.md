@@ -23,7 +23,7 @@ Data files based from https://github.com/fonse/pokemon-battle
 Backbone skeleton turn based battling and classes from https://github.com/cesaralvrz/Pokemon-Battle-Simulator
 
 ## Todo
-Add speed !!! Add some basic non-damaging move mechanics!
+Add some basic non-damaging move mechanics!
 Then add trainer class for 3v3 - 6v6
 Not too complex (no dig/fly mechanics and maybe no weather?)
 
