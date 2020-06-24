@@ -21,7 +21,7 @@ heal_moves_list = [4, 348, 353]
 confusion_moves_list = [77, 268, 338]
 flinch_moves_list = [32, 147, 151]
 poison_moves_list = [3, 78, 203, 210]
-burn_moves_list = [5, 201, 254, 274]
+burn_moves_list = [5, 126, 201, 254, 274]
 freeze_moves_list = [6, 261, 275]
 paralysis_moves_list = [7, 153, 263, 276]
 stat_moves_attacker_list = [139, 140, 141, 183, 205, 219, 230, 277, 296, 335]
@@ -473,19 +473,31 @@ class Pokemon:
             for i, x in enumerate(Pokemon2.moves):
                 print(i+1, movejson[x]['name'])
             index2 = int(input('Pick a move: '))
-
-            if self.check_attack_status(movejson[self.moves[index-1]]):
-                self.attack_move(Pokemon2, index)
-
-            if Pokemon2.check_faint(): 
-                break
-            if self.check_faint():
-                break
-
-            if Pokemon2.check_attack_status(movejson[self.moves[index2-1]]):
-                Pokemon2.attack_move(self, index2)
             
+            #if outspeed opponent (for equal priority) or your move has higher priority, you go first. Otherwise opponent goes first
+            if ((movejson[self.moves[index-1]]['priority'] == movejson[Pokemon2.moves[index2-1]]['priority']) and (self.curspeed >= Pokemon2.curspeed)) \
+                or (movejson[self.moves[index-1]]['priority'] > movejson[Pokemon2.moves[index2-1]]['priority']):
+                if self.check_attack_status(movejson[self.moves[index-1]]):
+                    self.attack_move(Pokemon2, index)
+                if self.check_faint():
+                    break
+                if Pokemon2.check_faint(): 
+                    break
+                if Pokemon2.check_attack_status(movejson[Pokemon2.moves[index2-1]]):
+                    Pokemon2.attack_move(self, index2)
+            else:
+                if Pokemon2.check_attack_status(movejson[Pokemon2.moves[index2-1]]):
+                    Pokemon2.attack_move(self, index2)
+                if self.check_faint():
+                    break
+                if Pokemon2.check_faint(): 
+                    break
+                if self.check_attack_status(movejson[self.moves[index-1]]):
+                    self.attack_move(Pokemon2, index)
+                
             if self.check_faint():
+                break
+            if Pokemon2.check_faint(): 
                 break
 
             
@@ -517,13 +529,13 @@ if __name__ == '__main__':
     # Creamos cada Pokémon
     Bulbasaur = Pokemon('1', ['12'], ['22', '75', '33', '73'],{'HP':105, 'ATTACK':54, 'DEFENSE':54, 'SPATTACK':70, 'SPDEFENSE':70, 'SPEED':50})
     Ivysaur = Pokemon('2', ['12'], ['22', '75', '331', '73'],{'HP':120, 'ATTACK':67, 'DEFENSE':68, 'SPATTACK':85, 'SPDEFENSE':85, 'SPEED':65})
-    Venusaur = Pokemon('3', ['12', '4'], ['403', '202', '305', '206'],{'HP':1140, 'ATTACK':87, 'DEFENSE':88, 'SPATTACK':105, 'SPDEFENSE':105, 'SPEED':85})
+    Venusaur = Pokemon('3', ['12', '4'], ['98', '202', '305', '206'],{'HP':1140, 'ATTACK':87, 'DEFENSE':88, 'SPATTACK':105, 'SPDEFENSE':105, 'SPEED':85})
     Charmander = Pokemon('4', ['10'], ['52', '10', '33', '7'],{'HP':99, 'ATTACK':57, 'DEFENSE':48, 'SPATTACK':65, 'SPDEFENSE':55, 'SPEED':70})
     Charmeleon = Pokemon('5', ['10'], ['52', '10', '53', '7'],{'HP':118, 'ATTACK':69, 'DEFENSE':63, 'SPATTACK':85, 'SPDEFENSE':70, 'SPEED':85})
     Charizard = Pokemon('6', ['10', '3'], ['53', '19', '307', '7'], {'HP':138, 'ATTACK':89, 'DEFENSE':83, 'SPATTACK':114, 'SPDEFENSE':90, 'SPEED':105})
     Squirtle = Pokemon('7', ['11'], ['61', '33', '29', '57'],{'HP':104, 'ATTACK':53, 'DEFENSE':70, 'SPATTACK':55, 'SPDEFENSE':69, 'SPEED':48})
     Wartortle = Pokemon('8', ['11'], ['61', '55', '29', '57'],{'HP':119, 'ATTACK':68, 'DEFENSE':85, 'SPATTACK':70, 'SPDEFENSE':85, 'SPEED':63})
-    Blastoise = Pokemon('9', ['11'], ['223', '87', '305', '206'],{'HP':1139, 'ATTACK':88, 'DEFENSE':105, 'SPATTACK':90, 'SPDEFENSE':110, 'SPEED':83})
+    Blastoise = Pokemon('9', ['11'], ['221', '87', '305', '206'],{'HP':1139, 'ATTACK':88, 'DEFENSE':105, 'SPATTACK':90, 'SPDEFENSE':110, 'SPEED':83})
 
 
     
