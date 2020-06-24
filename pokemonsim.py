@@ -433,6 +433,10 @@ class Pokemon:
                     Pokemon2.status = Status.none
                     print(Pokemon2.name + " is defrosted!")
 
+            elif (move_used['damage_class'] == 'non-damaging'):
+                if move_used['id'] == 150: #SPLASH
+                    print("But nothing happened!")
+                    return
             ###time.sleep(.5) print(self.name ,"health:", self.health) print(Pokemon2.name ,"health:", Pokemon2.health) time.sleep(.5)
 
 
