@@ -11,6 +11,7 @@ Will reorganize things and update CLI interface in the future
 (todo in the future)
 
 # Status
+Junw 23 (II): Status moves should be fully implemented now. Stat boosting moves should be fully implemented. Basic 1v1 mechanics should be complete except speed. Maybe test a bit more
 June 23: Added confusion effects to moves. Mechanics for acrobatics/struggle implemented. Implemented recoil-on-miss mechanics. Confusion moves and mechanics seem to be working.
 June 22: Added critical hit chances. Added mechanics for status conditions, and updated turn structuring. Did not fully test status moves yet (still have to update move effects)
 June 19: Updated some special/physical distinguishment. Updated attack damage calculations a bit
@@ -23,7 +24,6 @@ Backbone skeleton turn based battling and classes from https://github.com/cesara
 
 ## Todo
 Add speed !!!
-Add additional move effects
 Then add trainer class for 3v3 - 6v6
 Not too complex (no dig/fly mechanics and maybe no weather?)
 
