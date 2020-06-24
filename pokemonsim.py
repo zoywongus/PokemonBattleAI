@@ -375,10 +375,10 @@ class Pokemon:
                     num_hits = [2,2,3,3,4,5][math.floor(random.randint(0,5))]
                 # Determine damage taken
                 damage = 0
-                damage = calculate_damage(self, Pokemon2, move_used, move_effectiveness)
-                Pokemon2.curhealth = math.floor(Pokemon2.curhealth - damage)
-                Pokemon2.curhealth = max(Pokemon2.curhealth, 0)
-
+                for i in range(num_hits):
+                    damage += calculate_damage(self, Pokemon2, move_used, move_effectiveness)
+                    Pokemon2.curhealth = math.floor(Pokemon2.curhealth - damage)
+                    Pokemon2.curhealth = max(Pokemon2.curhealth, 0)
                 time.sleep(.2)
                 if (damage < 1):
                     print("Move had no effect...")
@@ -474,8 +474,9 @@ class Pokemon:
                 print(i+1, movejson[x]['name'])
             index2 = int(input('Pick a move: '))
             
-            #if outspeed opponent (for equal priority) or your move has higher priority, you go first. Otherwise opponent goes first
-            if ((movejson[self.moves[index-1]]['priority'] == movejson[Pokemon2.moves[index2-1]]['priority']) and (self.curspeed >= Pokemon2.curspeed)) \
+            #if outspeed opponent (for equal priority) or your move has higher priority, you go first. Otherwise opponent goes first. 50/50 if speed tie.
+            if ((movejson[self.moves[index-1]]['priority'] == movejson[Pokemon2.moves[index2-1]]['priority']) and ((self.curspeed > Pokemon2.curspeed) \
+                or (self.curspeed == Pokemon2.curspeed and random.random() > .5))) \
                 or (movejson[self.moves[index-1]]['priority'] > movejson[Pokemon2.moves[index2-1]]['priority']):
                 if self.check_attack_status(movejson[self.moves[index-1]]):
                     self.attack_move(Pokemon2, index)
@@ -529,7 +530,7 @@ if __name__ == '__main__':
     # Creamos cada Pokémon
     Bulbasaur = Pokemon('1', ['12'], ['22', '75', '33', '73'],{'HP':105, 'ATTACK':54, 'DEFENSE':54, 'SPATTACK':70, 'SPDEFENSE':70, 'SPEED':50})
     Ivysaur = Pokemon('2', ['12'], ['22', '75', '331', '73'],{'HP':120, 'ATTACK':67, 'DEFENSE':68, 'SPATTACK':85, 'SPDEFENSE':85, 'SPEED':65})
-    Venusaur = Pokemon('3', ['12', '4'], ['98', '202', '305', '206'],{'HP':1140, 'ATTACK':87, 'DEFENSE':88, 'SPATTACK':105, 'SPDEFENSE':105, 'SPEED':85})
+    Venusaur = Pokemon('3', ['12', '4'], ['98', '202', '305', '331'],{'HP':1140, 'ATTACK':87, 'DEFENSE':88, 'SPATTACK':105, 'SPDEFENSE':105, 'SPEED':85})
     Charmander = Pokemon('4', ['10'], ['52', '10', '33', '7'],{'HP':99, 'ATTACK':57, 'DEFENSE':48, 'SPATTACK':65, 'SPDEFENSE':55, 'SPEED':70})
     Charmeleon = Pokemon('5', ['10'], ['52', '10', '53', '7'],{'HP':118, 'ATTACK':69, 'DEFENSE':63, 'SPATTACK':85, 'SPDEFENSE':70, 'SPEED':85})
     Charizard = Pokemon('6', ['10', '3'], ['53', '19', '307', '7'], {'HP':138, 'ATTACK':89, 'DEFENSE':83, 'SPATTACK':114, 'SPDEFENSE':90, 'SPEED':105})
