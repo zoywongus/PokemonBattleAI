@@ -653,8 +653,7 @@ if __name__ == '__main__':
     Tyranitar = Pokemon('248', ['468', '464', '504', '411']) #variety stat/damaging
     Palkia = Pokemon('484', ['410', '460', '347', '434']) #damaging w/effects
     
-        
-    
+
 
     #battle configuration
-    Venusaur.fight(Mewtwo) 
+    Chansey.fight(Registeel) 
