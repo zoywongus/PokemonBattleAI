@@ -298,8 +298,8 @@ class Pokemon:
 
     def calculate_recoil_on_miss(self):
         recoil = min(math.floor(self.health/2), self.curhealth)
-        self.health -= recoil
-        print(self.name + " kept on going and crashed for " + str(recoil) + " HP (" + str(100*recoil/self.health) + ") recoil damage!")
+        self.curhealth -= recoil
+        print(self.name + " kept on going and crashed for " + str(recoil) + "HP (" + str(100*recoil/self.health) + "%) recoil damage!")
 
     def apply_status_damage(self):
         if self.status == Status.poison:
@@ -442,7 +442,7 @@ class Pokemon:
             if not(self.check_move_hit(move_used)) and (move_used['damage_class'] != 'non-damaging') \
                 and not(move_used['effect'] == 18) and not(move_used['effect'] == 79):
                 print('The attack missed!')
-                if move_used['effect'] == 46:
+                if move_used['effect'] == 46: #jump kicks
                     self.calculate_recoil_on_miss()
 
             elif (move_used['damage_class'] != 'non-damaging'):
@@ -464,6 +464,8 @@ class Pokemon:
                     Pokemon2.curhealth = max(Pokemon2.curhealth, 0)
                 time.sleep(.2)
                 if (damage < 1):
+                    if move_used['effect'] == 46: #jump kicks
+                        self.calculate_recoil_on_miss()
                     print("Move had no effect...")
                     return
                 else:
@@ -684,9 +686,14 @@ if __name__ == '__main__':
     Golem = Pokemon('76', ['444', '89', '431', '153'])
     Articuno = Pokemon('144', ['59', '613', '97', '524'])
     Dusknoir = Pokemon('477', ['421', '95', '441', '342'])
+    Lugia = Pokemon('249', ['177', '354', '324', '92'])
+    Metagross = Pokemon('376', ['309', '334', '326', '232'])
+    Rayquaza = Pokemon('384', ['407', '403', '533', '434'])
+    Gyarados = Pokemon('130', ['349', '350', '245', '127'])
+    Weavile = Pokemon('461', ['420', '400', '136', '422'])
     
 
-    p1 = Mewtwo
-    p2 = Golem
+    p1 = Dusknoir
+    p2 = Weavile
     #battle configuration
     p1.fight(p2) 
