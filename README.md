@@ -13,6 +13,8 @@ Move numbers found in `moves.json`, Pokemon numbers found `pokemon.json`. Venusa
 
 # Status updates of project
 ```
+June 29: Added non damaging stat moves + non damaging status condition moves. Fixed some bugs for STAB, healing moves, and stat condition lists.
+
 June 24: 1v1 battling works (some move effects not implemented yet - still need more tests). Added some Pokemon to test around. Level 50 stats now automatically calculated for each Pokemon. 
 
 June 23 (II): Status moves should be fully implemented now. Stat boosting moves should be fully implemented. Basic 1v1 mechanics should be complete. Basic non-damaging moves not in effect yet. Maybe test a bit more
@@ -29,9 +31,9 @@ Data files based from https://github.com/fonse/pokemon-battle
 Backbone skeleton turn based battling and classes from https://github.com/cesaralvrz/Pokemon-Battle-Simulator
 
 ## Todo
-Add some basic non-damaging move mechanics!
 Then add trainer class for 3v3 - 6v6
-Not too complex (no dig/fly mechanics and maybe no weather?)
+Upload file of possible moves that can be used in simulation that is implemented so far.
+Final plan is not too complex (no dig/fly mechanics and maybe no weather?)
 
 
 ### Translations to Keep Track?

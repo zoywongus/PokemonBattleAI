@@ -18,15 +18,16 @@ accuracy_stage_multiplier = {-6: 0.33, -5: 0.375, -4: 0.428, -3: 0.5, -2: 0.6, -
 recoil_moves_list = [49, 199, 254, 255, 263, 270]
 weight_moves_list = [197,292]
 heal_moves_list = [4, 348, 353]
-confusion_moves_list = [77, 268, 338]
+sleep_moves_list = [2]
+confusion_moves_list = [50, 200, 77, 268, 338]
 flinch_moves_list = [32, 147, 151]
-poison_moves_list = [3, 78, 203, 210]
-burn_moves_list = [5, 126, 201, 254, 274]
+poison_moves_list = [3, 34, 67, 78, 203, 210]
+burn_moves_list = [5, 126, 168, 201, 254, 274]
 freeze_moves_list = [6, 261, 275]
-paralysis_moves_list = [7, 153, 263, 276]
-stat_moves_attacker_list = [139, 140, 141, 183, 205, 219, 230, 277, 296, 335]
-stat_moves_defender_list = [21, 69, 70, 71, 72, 73, 272, 297, 331]
-#sleep list too
+paralysis_moves_list = [7, 68, 153, 263, 276]
+stat_moves_attacker_list = [139, 140, 141, 183, 205, 219, 230, 277, 296, 335, 51, 52, 53, 54, 55, \
+    285, 209, 212, 175, 323, 207, 161, 329, 110, 157, 12, 213, 317, 328, 278, 11, 309, 313, 322, 291]
+stat_moves_defender_list = [21, 69, 70, 71, 72, 73, 272, 297, 331, 59, 361, 61, 63, 24, 167, 19, 20, 60, 24, 21, 119]
 
 
 class Status(enum.Enum):
@@ -69,8 +70,8 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     if random.random() <= crit_chance:
         print("A critical hit!")
         critical = 2
-   
-    if move_info['type'] in pokemonjson[Pokemon1.id]['types']:
+
+    if str(move_info['type']) in pokemonjson[Pokemon1.id]['types']:
         stab = 1.5
 
     if move_info['effect'] in weight_moves_list:
@@ -120,6 +121,10 @@ class Pokemon:
         if len(self.types) > 1:
             self.types[1] = str(self.types[1])
 
+    #returns 0-100 random num generated for accuracy including stage modifier
+    def get_accuracy_num(self):
+        return random.randint(1,100)*accuracy_stage_multiplier[self.accuracystage]
+
     def check_faint(self): #checks if fainted and prints out faint statement if true
         if self.curhealth <= 0:
             delay_print("\n..." + self.name + ' fainted.')
@@ -127,45 +132,82 @@ class Pokemon:
 
         return False
 
-    #Applies stat changes depending on effect id on Pokemon
+    #Applies stat changes depending on effect id on Pokemon:
     def change_stat_stage(self, move_effect):
         stat_string = ""
-        if move_effect in [69, 183]:
+        if move_effect in [69, 183, 19]:
             self.attackstage = max(-6, self.attackstage - 1)
             stat_string += self.name + "'s attack fell!\n"
-        if move_effect in [70, 183, 230, 335]:
+        if move_effect in [70, 183, 230, 335, 20, 309]:
             self.defensestage = max(-6, self.defensestage - 1)
             stat_string += self.name + "'s defense fell!\n"
         if move_effect in [72]:
             self.spattackstage = max(-6, self.spattackstage - 1)
             stat_string += self.name + "'s special attack fell!\n"
-        if move_effect in [73, 230, 335]:
+        if move_effect in [73, 230, 335, 309]:
             self.spdefensestage = max(-6, self.spdefensestage - 1)
             stat_string += self.name + "'s special defense fell!\n"
-        if move_effect in [21, 71, 331, 335]:
+        if move_effect in [21, 71, 331, 335, 110]:
             self.speedstage = max(-6, self.speedstage - 1)
             stat_string += self.name + "'s speed fell!\n"
-        if move_effect in [140, 141]:
-            self.attackstage = min(6, self.attackstage + 1)
-            stat_string += self.name + "'s attack rose!\n"
-        if move_effect in [139, 141]:
-            self.defensestage = min(6, self.defensestage + 1)
-            stat_string += self.name + "'s defense rose!\n"
-        if move_effect in [277, 141]:
-            self.spattackstage = min(6, self.spattackstage + 1)
-            stat_string += self.name + "'s special attack rose!\n"
-        if move_effect in [141]:
-            self.spdefensestage = min(6, self.spdefensestage + 1)
-            stat_string += self.name + "'s special defense rose!\n"
-        if move_effect in [219, 296, 141]:
-            self.speedstage = min(6, self.speedstage + 1)
-            stat_string += self.name + "'s speed rose!\n"
-        if move_effect in [205]:
+        if move_effect in [24]:
+            self.accuracystage = max(-6, self.accuracystage - 1)
+            stat_string += self.name + "'s accuracy fell!\n"
+        if move_effect in [59]:
+            self.attackstage = max(-6, self.attackstage - 2)
+            stat_string += self.name + "'s attack harshly fell!\n"
+        if move_effect in [60]:
+            self.defensestage = max(-6, self.defensestage - 2)
+            stat_string += self.name + "'s defense harshly fell!\n"
+        if move_effect in [205, 361]:
             self.spattackstage = max(-6, self.spattackstage - 2)
             stat_string += self.name + "'s special attack harshly fell!\n"
-        if move_effect in [272, 297]:
+        if move_effect in [272, 297, 63]:
             self.spdefensestage = max(-6, self.spdefensestage - 2)
-            stat_string += self.name + "'s special attack defense fell!\n"
+            stat_string += self.name + "'s special defense harshly fell!\n"
+        if move_effect in [61]:
+            self.speedstage = max(-6, self.speedstage - 2)
+            stat_string += self.name + "'s speed harshly fell!\n"
+        if move_effect in [140, 141, 209, 323, 110, 213, 317, 328, 278, 11, 313]:
+            self.attackstage = min(6, self.attackstage + 1)
+            stat_string += self.name + "'s attack rose!\n"
+        if move_effect in [139, 141, 161, 207, 209, 323, 110, 12, 157]:
+            self.defensestage = min(6, self.defensestage + 1)
+            stat_string += self.name + "'s defense rose!\n"
+        if move_effect in [277, 141, 212, 167, 317, 328, 291]:
+            self.spattackstage = min(6, self.spattackstage + 1)
+            stat_string += self.name + "'s special attack rose!\n"
+        if move_effect in [141, 212, 175, 161, 207, 291]:
+            self.spdefensestage = min(6, self.spdefensestage + 1)
+            stat_string += self.name + "'s special defense rose!\n"
+        if move_effect in [219, 296, 141, 213, 291]:
+            self.speedstage = min(6, self.speedstage + 1)
+            stat_string += self.name + "'s speed rose!\n"
+        if move_effect in [323, 278]:
+            self.accuracystage = min(6, self.accuracystage + 1)
+            stat_string += self.name + "'s accuracy rose!\n"
+        if move_effect in [51, 309, 119]:
+            self.attackstage = min(6, self.attackstage + 2)
+            stat_string += self.name + "'s attack rose sharply!\n"
+        if move_effect in [52]:
+            self.defensestage = min(6, self.defensestage + 2)
+            stat_string += self.name + "'s defense rose sharply!\n"
+        if move_effect in [54, 309]:
+            self.spattackstage = min(6, self.spattackstage + 2)
+            stat_string += self.name + "'s special attack rose sharply!\n"
+        if move_effect in [55]:
+            self.spdefensestage = min(6, self.spdefensestage + 2)
+            stat_string += self.name + "'s special defense rose sharply!\n"
+        if move_effect in [53, 285, 309, 313]:
+            self.speedstage = min(6, self.speedstage + 2)
+            stat_string += self.name + "'s speed rose sharply!\n"
+        if move_effect in [329]:
+            self.defensestage = min(6, self.defensestage + 3)
+            stat_string += self.name + "'s defense rose drastically!\n"
+        if move_effect in [322]:
+            self.spattackstage = min(6, self.spattackstage + 3)
+            stat_string += self.name + "'s special attack rose drastically!\n"
+        
 
         print(stat_string)
 
@@ -239,9 +281,10 @@ class Pokemon:
 
     def calculate_heal(self, damage, move_effect):
         healhp = math.floor(damage * 0.5)
-        if move_effect == 353:
+        if move_effect in [4, 353]:
             healhp = math.floor(damage * 0.75)
-        
+        else: #up to 50% of max HP
+            healhp = math.floor(self.health * 0.5)
         healhp = min(self.health - self.curhealth, healhp) #can't go above max health
         if healhp == 0:
             return
@@ -264,13 +307,16 @@ class Pokemon:
 
     def apply_status_ailment(self, move_effect):
         if move_effect in burn_moves_list:
-            self.apply_burn()
+            return self.apply_burn()
         elif move_effect in poison_moves_list:
-            self.apply_poison()
+            return self.apply_poison()
         elif move_effect in freeze_moves_list:
-            self.apply_freeze()
+            return self.apply_freeze()
         elif move_effect in paralysis_moves_list:
-            self.apply_paralysis()
+            return self.apply_paralysis()
+        elif move_effect in sleep_moves_list:
+            return self.apply_sleep()
+        return False
 
     def unapply_status_ailment(self):
         self.status = Status.none
@@ -283,6 +329,8 @@ class Pokemon:
             self.status = Status.paralysis
             self.curspeed = self.curspeed * 0.5
             print(self.name + " is paralyzed! It may not be able to move!")
+            return True
+        return False
     
     #unapplies paralysis/speed change
     def unapply_paralysis(self):
@@ -290,31 +338,41 @@ class Pokemon:
         self.curspeed = self.curspeed * 2
 
     def apply_sleep(self):
-        if self.check_status_affect():
+        if self.check_status_affect(Status.sleep):
             self.status = Status.sleep
             self.sleep_counter = random.randint(1,3)
             print(self.name + " has fallen asleep...")
+            return True
+        return False
 
     def apply_poison(self):
         if self.check_status_affect(Status.poison):
             self.status = Status.poison
             print(self.name + " is poisoned!")
+            return True
+        return False
 
     def apply_freeze(self):
         if self.check_status_affect(Status.freeze):
             self.status = Status.freeze
             print(self.name + " is frozen!")
+            return True
+        return False
     
     def apply_burn(self):
         if self.check_status_affect(Status.burn):
             self.status = Status.burn
             print(self.name + " is burned!")
+            return True
+        return False
 
     def apply_confusion(self):
         if not(self.confusion):
             self.confusion = True
             self.confusion_counter = random.randint(2,5)
             print(self.name + " is confused!")
+            return True
+        return False
 
     #Status conditions / confusion may prevent pokemon from attacking
     def check_attack_status(self, move):
@@ -368,8 +426,9 @@ class Pokemon:
             move_used = movejson[self.moves[index-1]]
             print(self.name ,"used", move_used['name'])
             time.sleep(1)
-            #move effect 18 are attacks that don't miss
-            if (random.randint(1,100) > move_used['accuracy']) and (move_used['damage_class'] != 'non-damaging') and not(move_used['effect'] == 18) and not(move_used['effect'] == 79):
+            #move effect 18/79 are attacks that don't miss
+            if (self.get_accuracy_num() > move_used['accuracy']) and (move_used['damage_class'] != 'non-damaging') \
+                and not(move_used['effect'] == 18) and not(move_used['effect'] == 79):
                 print('The attack missed!')
                 if move_used['effect'] == 46:
                     self.calculate_recoil_on_miss()
@@ -437,7 +496,31 @@ class Pokemon:
                 if move_used['id'] == 150: #SPLASH
                     print("But nothing happened!")
                     return
-            ###time.sleep(.5) print(self.name ,"health:", self.health) print(Pokemon2.name ,"health:", Pokemon2.health) time.sleep(.5)
+                if move_used['effect'] == 143: #belly drum
+                    newhealth = max(0, math.floor(self.curhealth - (0.5*health)))
+                    if newhealth != 0:
+                        self.curhealth = newhealth
+                        self.attackstage = 6
+                        print(self.name + " maximized its attack!")
+                    else:
+                        print("But it failed!")
+                        return
+                #non-damaging stat moves (on attacker/defender)
+                if move_used['effect'] in stat_moves_attacker_list:
+                    self.change_stat_stage(move_used['effect'])
+                if move_used['effect'] in stat_moves_defender_list:
+                    Pokemon2.change_stat_stage(move_used['effect'])
+                    #check swagger and flatter 119, 167
+                    if move_used['effect'] in [119, 167]:
+                        if not(Pokemon2.apply_confusion()):
+                            print(Pokemon2.name + " is already confused!")
+                #non-damaging status condition moves: 68
+                if move_used['effect'] in (confusion_moves_list + burn_moves_list + freeze_moves_list + poison_moves_list + paralysis_moves_list):
+                    if (move_used['effect'] in [50,200]) and (self.get_accuracy_num() > move_used['accuracy']):
+                        if not(Pokemon2.apply_status_ailment(move_used['effect'])):
+                            print(Pokemon2.name + " is not affected!")
+                
+            return
 
 
     def fight(self, Pokemon2):
