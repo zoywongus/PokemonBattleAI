@@ -5,7 +5,8 @@ Pokemon Specs
 
 ## How to run simulator
 Do `python3 pokemonsim.py`. Also at the bottom of script, you can add your own or use the pre-made Pokemons (change `[POKEMON1OBJECT].fight([POKEMON2OBJECT])`).
-Move numbers found in `moves.json`, Pokemon numbers found `pokemon.json`. Venusaur.fight(Mewtwo).
+All supported moves found in `supported_moves.csv`
+Move IDs found in `moves.json`, Pokemon numbers found `pokemon.json`. Venusaur.fight(Mewtwo).
 
 
 ## Running AI stuff

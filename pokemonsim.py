@@ -17,7 +17,7 @@ accuracy_stage_multiplier = {-6: 0.33, -5: 0.375, -4: 0.428, -3: 0.5, -2: 0.6, -
 #effects number of moves
 recoil_moves_list = [49, 199, 254, 255, 263, 270]
 weight_moves_list = [197,292]
-heal_moves_list = [4, 348, 353]
+heal_moves_list = [4, 348, 33, 133, 353]
 sleep_moves_list = [2]
 confusion_moves_list = [50, 200, 77, 268, 338]
 flinch_moves_list = [32, 147, 151]
@@ -27,7 +27,7 @@ freeze_moves_list = [6, 261, 275]
 paralysis_moves_list = [7, 68, 153, 263, 276]
 stat_moves_attacker_list = [139, 140, 141, 183, 205, 219, 230, 277, 296, 335, 51, 52, 53, 54, 55, \
     285, 209, 212, 175, 323, 207, 161, 329, 110, 157, 12, 213, 317, 328, 278, 11, 309, 313, 322, 291]
-stat_moves_defender_list = [21, 69, 70, 71, 72, 73, 272, 297, 331, 59, 361, 61, 63, 24, 167, 19, 20, 60, 24, 21, 119]
+stat_moves_defender_list = [21, 69, 70, 71, 72, 73, 272, 297, 331, 59, 361, 61, 63, 24, 167, 19, 20, 60, 24, 21, 119, 74]
 
 
 class Status(enum.Enum):
@@ -51,7 +51,7 @@ def convert(basestats, level=50):
 
 def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     critical = weather = burnstatus = other = stab = 1
-    crit_chance = 0.0625
+    crit_chance = 0.035 #0.0625 pseudo random generator makes the default too high rate
     power = move_info['power']
     attack = Pokemon1.attack * stat_stage_multiplier[Pokemon1.attackstage]
     defense = Pokemon2.defense * stat_stage_multiplier[Pokemon2.defensestage]
@@ -121,13 +121,15 @@ class Pokemon:
         if len(self.types) > 1:
             self.types[1] = str(self.types[1])
 
-    #returns 0-100 random num generated for accuracy including stage modifier
-    def get_accuracy_num(self):
-        return random.randint(1,100)*accuracy_stage_multiplier[self.accuracystage]
+    def check_move_hit(self, move_used):
+        randomnum = random.randint(1,100)*accuracy_stage_multiplier[self.accuracystage] #random from 1,100 * accuracy modifier
+        if randomnum >= (100 - move_used['accuracy']):
+            return True
+        return False
 
     def check_faint(self): #checks if fainted and prints out faint statement if true
         if self.curhealth <= 0:
-            delay_print("\n..." + self.name + ' fainted.')
+            print("..." + self.name + ' fainted.')
             return True
 
         return False
@@ -150,7 +152,7 @@ class Pokemon:
         if move_effect in [21, 71, 331, 335, 110]:
             self.speedstage = max(-6, self.speedstage - 1)
             stat_string += self.name + "'s speed fell!\n"
-        if move_effect in [24]:
+        if move_effect in [24, 74]:
             self.accuracystage = max(-6, self.accuracystage - 1)
             stat_string += self.name + "'s accuracy fell!\n"
         if move_effect in [59]:
@@ -248,7 +250,7 @@ class Pokemon:
             hurt = math.floor(damage / 2)
 
         self.health -= hurt
-        print(self.name + " was hurt " + str(hurt) + "HP (" + str(100*hurt/self.health) + "%)by recoil!")
+        print(self.name + " was hurt " + str(hurt) + "HP (" + str(round(100*hurt/self.health, 2)) + "%) by recoil!")
 
     def calculate_weight_power(self, Pokemon2, move_effect):
         pokemon1_weight = pokemonjson[self.id]['weight']
@@ -280,7 +282,9 @@ class Pokemon:
                 return 40
 
     def calculate_heal(self, damage, move_effect):
-        healhp = math.floor(damage * 0.5)
+        healhp = -1
+        if damage != -1: #damage is -1 in non damaging moves
+            healhp = math.floor(damage * 0.5)
         if move_effect in [4, 353]:
             healhp = math.floor(damage * 0.75)
         else: #up to 50% of max HP
@@ -316,6 +320,8 @@ class Pokemon:
             return self.apply_paralysis()
         elif move_effect in sleep_moves_list:
             return self.apply_sleep()
+        elif move_effect in confusion_moves_list:
+            return self.apply_confusion()
         return False
 
     def unapply_status_ailment(self):
@@ -374,6 +380,12 @@ class Pokemon:
             return True
         return False
 
+    #Reset some modifiers when Pokemon is withdrawn
+    def withdraw_pokemon(self):
+        self.confusion = False
+        self.attackstage = self.defensestage = self.spattackstage = self.spdefensestage = \
+            self.speedstage = self.accuracystage = 0
+
     #Status conditions / confusion may prevent pokemon from attacking
     def check_attack_status(self, move):
         if self.flinch:
@@ -427,7 +439,7 @@ class Pokemon:
             print(self.name ,"used", move_used['name'])
             time.sleep(1)
             #move effect 18/79 are attacks that don't miss
-            if (self.get_accuracy_num() > move_used['accuracy']) and (move_used['damage_class'] != 'non-damaging') \
+            if not(self.check_move_hit(move_used)) and (move_used['damage_class'] != 'non-damaging') \
                 and not(move_used['effect'] == 18) and not(move_used['effect'] == 79):
                 print('The attack missed!')
                 if move_used['effect'] == 46:
@@ -466,6 +478,8 @@ class Pokemon:
                 #recoil damage moves
                 if int(move_used['effect']) in recoil_moves_list:
                     self.calculate_recoil_damage(damage, move_used['effect'])
+                elif move_used['effect'] == 8:
+                    self.curhealth = 0
                 elif int(move_used['effect']) in heal_moves_list:
                     self.calculate_heal(damage, move_used['effect'])
                 #Confusion
@@ -505,20 +519,24 @@ class Pokemon:
                     else:
                         print("But it failed!")
                         return
+                elif move_used['effect'] in heal_moves_list:
+                    self.calculate_heal(-1, move_used['effect'])
                 #non-damaging stat moves (on attacker/defender)
                 if move_used['effect'] in stat_moves_attacker_list:
                     self.change_stat_stage(move_used['effect'])
-                if move_used['effect'] in stat_moves_defender_list:
+                if move_used['effect'] in stat_moves_defender_list and self.check_move_hit(move_used):
                     Pokemon2.change_stat_stage(move_used['effect'])
                     #check swagger and flatter 119, 167
                     if move_used['effect'] in [119, 167]:
                         if not(Pokemon2.apply_confusion()):
                             print(Pokemon2.name + " is already confused!")
                 #non-damaging status condition moves: 68
-                if move_used['effect'] in (confusion_moves_list + burn_moves_list + freeze_moves_list + poison_moves_list + paralysis_moves_list):
-                    if (move_used['effect'] in [50,200]) and (self.get_accuracy_num() > move_used['accuracy']):
+                if move_used['effect'] in (confusion_moves_list + burn_moves_list + freeze_moves_list + poison_moves_list + paralysis_moves_list + sleep_moves_list):
+                    if self.check_move_hit(move_used):
                         if not(Pokemon2.apply_status_ailment(move_used['effect'])):
                             print(Pokemon2.name + " is not affected!")
+                    else:
+                        print("The attack missed!")
                 
             return
 
@@ -574,9 +592,12 @@ class Pokemon:
             index2 = int(input('Pick a move: '))
             
             #if outspeed opponent (for equal priority) or your move has higher priority, you go first. Otherwise opponent goes first. 50/50 if speed tie.
-            if ((movejson[self.moves[index-1]]['priority'] == movejson[Pokemon2.moves[index2-1]]['priority']) and ((self.curspeed > Pokemon2.curspeed) \
-                or (self.curspeed == Pokemon2.curspeed and random.random() > .5))) \
+            pokemon1speed = self.curspeed * stat_stage_multiplier[self.speedstage]
+            pokemon2speed = Pokemon2.curspeed * stat_stage_multiplier[Pokemon2.speedstage]
+            if ((movejson[self.moves[index-1]]['priority'] == movejson[Pokemon2.moves[index2-1]]['priority']) and ((pokemon1speed > pokemon2speed) \
+                or (pokemon1speed == pokemon2speed and random.random() > .5))) \
                 or (movejson[self.moves[index-1]]['priority'] > movejson[Pokemon2.moves[index2-1]]['priority']):
+
                 if self.check_attack_status(movejson[self.moves[index-1]]):
                     self.attack_move(Pokemon2, index)
                 if self.check_faint():
@@ -585,20 +606,23 @@ class Pokemon:
                     break
                 if Pokemon2.check_attack_status(movejson[Pokemon2.moves[index2-1]]):
                     Pokemon2.attack_move(self, index2)
+                if Pokemon2.check_faint(): 
+                    break
+                if self.check_faint():
+                    break
             else:
                 if Pokemon2.check_attack_status(movejson[Pokemon2.moves[index2-1]]):
                     Pokemon2.attack_move(self, index2)
+                if Pokemon2.check_faint(): 
+                    break
+                if self.check_faint():
+                    break
+                if self.check_attack_status(movejson[self.moves[index-1]]):
+                    self.attack_move(Pokemon2, index)
                 if self.check_faint():
                     break
                 if Pokemon2.check_faint(): 
                     break
-                if self.check_attack_status(movejson[self.moves[index-1]]):
-                    self.attack_move(Pokemon2, index)
-                
-            if self.check_faint():
-                break
-            if Pokemon2.check_faint(): 
-                break
 
             
             ### status damage
@@ -652,8 +676,17 @@ if __name__ == '__main__':
     Registeel = Pokemon('379', ['139', '261', '334', '97']) #all non damaging
     Tyranitar = Pokemon('248', ['468', '464', '504', '411']) #variety stat/damaging
     Palkia = Pokemon('484', ['410', '460', '347', '434']) #damaging w/effects
+
+    Sceptile = Pokemon('254', ['348', '406', '235', '536'])
+    Lucario = Pokemon('448', ['370', '183', '442', '14'])
+    Infernape = Pokemon('392', ['53', '409', '595', '261'])
+    Wailord = Pokemon('321', ['57', '453', '417', '317'])
+    Golem = Pokemon('76', ['444', '89', '431', '153'])
+    Articuno = Pokemon('144', ['59', '613', '97', '524'])
+    Dusknoir = Pokemon('477', ['421', '95', '441', '342'])
     
 
-
+    p1 = Mewtwo
+    p2 = Golem
     #battle configuration
-    Chansey.fight(Registeel) 
+    p1.fight(p2) 
