@@ -626,7 +626,7 @@ if __name__ == '__main__':
         pokemonjson = json.load(json_file) 
 
 
-    # Sample Pokemon to use (damaging moves only for now)
+    # Sample 1.0 --- Sample Pokemon to use (damaging moves only for now)
     Bulbasaur = Pokemon('1', ['22', '75', '33', '73'])
     Ivysaur = Pokemon('2', ['22', '75', '331', '73'])
     Venusaur = Pokemon('3', ['188', '202', '34', '89'])
@@ -646,7 +646,12 @@ if __name__ == '__main__':
     Snorlax = Pokemon('143', ['38', '89', '7', '484'])
     Mewtwo = Pokemon('150', ['94', '411', '126', '247'])
 
-
+    # Sample 2.0 --- Sample pokemon with mix of non damge status/stat moves + damaging moves
+    Chansey = Pokemon('113', ['105', '109', '207', '451']) #non damaging healing moves + stat boosting? + status moves
+    Groudon = Pokemon('383', ['322', '86', '414', '103']) #stat boost moves, attacking
+    Registeel = Pokemon('379', ['139', '261', '334', '97']) #all non damaging
+    Tyranitar = Pokemon('248', ['468', '464', '504', '411']) #variety stat/damaging
+    Palkia = Pokemon('484', ['410', '460', '347', '434']) #damaging w/effects
     
         
     
