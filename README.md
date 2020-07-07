@@ -14,6 +14,8 @@ Move IDs found in `moves.json`, Pokemon numbers found `pokemon.json`. Venusaur.f
 
 # Status updates of project
 ```
+July 7: Finished 6v6 implementation (did some testing battles). Updated input/output interface.
+
 July 6: Implemented Trainer Class and functionality. Switch-in functions and checks implemented; not inserted in game logic yet
 
 June 30: Did lots of testing on stat and status moves. Fixed some mechanics (healing moves/critical hit) and bugs in accuracy. Added selfdestructing move mechanics for jokes. Added supported moves csv. Added more Pokemon samples to prepare for 6v6 implementation
@@ -36,15 +38,14 @@ Data files based from https://github.com/fonse/pokemon-battle
 Backbone skeleton turn based battling and classes from https://github.com/cesaralvrz/Pokemon-Battle-Simulator
 
 ## Todo
-Then add trainer class for 3v3 - 6v6
-Upload file of possible moves that can be used in simulation that is implemented so far.
+Make simulation code/structure/documentation look prettier
+Can enter game from different states of Pokemons if needed for AI
+Can log game progress into files/variables if needed for AI
+
 Final plan is not too complex (no dig/fly mechanics and maybe no weather?)
 
 ## To test
-Multi hit moves
-recoil moves (+ jump kick/hi jump kick)
-status condition possibilities
-stat boosting moves
+random game mechanics in 6v6 that might have been missed earlier
 
 ### Translations to Keep Track?
 Note: all will use level 50 defaults 0EV/0IV so just round down each calculation

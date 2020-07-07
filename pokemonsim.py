@@ -660,20 +660,72 @@ class Trainer:
             return True
         return False
 
+    def getpromptstring(self):
+        print("\n------" + self.name + "------  (%d/%d Pokemon left)" %(len(self.alive_pokemon), len(self.pokemons)))
+        print("Active Pokemon: %s -- Health: %s/%s  %s" \
+            %(self.active_pokemon.name, self.active_pokemon.curhealth, self.active_pokemon.health, self.active_pokemon.get_status_string()))
+        if (len(self.alive_pokemon) > 1):
+            return "Choose an Action (enter any other option to run away):\n1. Fight\n2. Switch Pokemon\nEnter choice: "
+        return "Choose an Action (enter any other option to run away):\n1. Fight\nEnter choice: "
 
-    def switch_pokemon(self):
-        print('Select a Pokemon to switch (enter number): ')
-        for n in len(self.alive_pokemon):
-            p = self.alive_pokemon[n]
-            print(str(n+1) + ': ' + p.name + '\t\t' + p.curhealth + 'HP ' + p.get_status_string())
+    #update trainer pokemon; active pokemon fainted
+    def update_fainted_pokemon(self):
+        self.fainted_pokemon.append(self.active_pokemon)
+        for p in self.alive_pokemon:
+            if p in self.fainted_pokemon:
+                self.alive_pokemon.remove(p)
 
-        pindex = input('\nPokemon number: ')
+    #prompt to get index of pokemon to switch
+    def get_switch_pokemon_choice(self):
+        while True:
+            print('Select a Pokemon to switch (enter number): ')
+            for n in range(len(self.alive_pokemon)):
+                p = self.alive_pokemon[n]
+                active_string = ''
+                if p == self.active_pokemon:
+                    active_string = '\t[[Active Pokemon]]'
+                print(str(n+1) + ': ' + p.name + '\t\t' + str(p.curhealth) + 'HP ' + p.get_status_string() + active_string)
+
+            pindex = int(input('\nPokemon number: '))
+            if self.alive_pokemon[pindex-1] == self.active_pokemon:
+                print('\n------Cannot switch into current active pokemon------')
+            else:
+                return pindex
+
+    def switch_pokemon(self, pindex, faintflag=0):
         p_selected = self.alive_pokemon[pindex-1]
         self.active_pokemon.withdraw_pokemon()
-        print('\nWithdrew ' + self.current_pokemon.name + '! Sent out ' + p_selected.name + '!')
+        if faintflag == 0:
+            print('\n' + self.name + ' withdrew ' + self.active_pokemon.name + '! Sent out ' + p_selected.name + '!')
+        else:
+            print('\n' + self.name + ' sent out ' + p_selected.name + '!')
         self.active_pokemon = p_selected
-        
     
+    ## self trainer active pokemon attack Trainer2's active pokemon
+    def attack(self, Trainer2, index):
+        switched_flag = 0
+        if self.active_pokemon.check_attack_status(movejson[self.active_pokemon.moves[index-1]]):
+            self.active_pokemon.attack_move(Trainer2.active_pokemon, index)
+            if self.active_pokemon.check_faint():
+                self.update_fainted_pokemon()
+                if self.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    i = self.get_switch_pokemon_choice()
+                    self.switch_pokemon(i, 1)
+            if Trainer2.active_pokemon.check_faint(): 
+                Trainer2.update_fainted_pokemon()
+                switched_flag = 1
+                if Trainer2.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    i = Trainer2.get_switch_pokemon_choice()
+                    Trainer2.switch_pokemon(i, 1)
+        
+        return switched_flag
+
     def fight(self, Trainer2):
 
         # Initial battle text
@@ -691,74 +743,91 @@ class Trainer:
         print(trainer2text)
         
         time.sleep(1)
-        
+               
         # Match loop
         turn_number = 0
         while not(self.lost_match()) or not(Trainer2.lost_match()):
+            index1 = index2 = pindex1 = pindex2 = -10 #index for move chosen/pokemon swapped reset
+
             #increment turn number; no Pokemon are flinched in the beginning
             turn_number += 1
             self.active_pokemon.flinch = Trainer2.active_pokemon.flinch = False
 
             # Print turn and pokemon info
-            print("_____TURN #" + str(turn_number) + "_____")
-            print(self.active_pokemon.name ,"health:", self.active_pokemon.curhealth, self.active_pokemon.get_status_string())
-            print(Trainer2.active_pokemon.name ,"health:", Trainer2.active_pokemon.curhealth, Trainer2.active_pokemon.get_status_string())
+            print("\n_____TURN #" + str(turn_number) + "_____")
 
-            print("\nMoves for " + self.active_pokemon.name)
-            for i, x in enumerate(self.active_pokemon.moves):
-                print(i+1, movejson[x]['name'])
-            index = int(input('Pick a move: '))
-
-            print("\nMoves for " + Trainer2.active_pokemon.name)
-            for i, x in enumerate(Trainer2.active_pokemon.moves):
-                print(i+1, movejson[x]['name'])
-            index2 = int(input('Pick a move: '))
-            
-            #if outspeed opponent (for equal priority) or your move has higher priority, you go first. Otherwise opponent goes first. 50/50 if speed tie.
-            pokemon1speed = self.active_pokemon.curspeed * stat_stage_multiplier[self.active_pokemon.speedstage]
-            pokemon2speed = Trainer2.active_pokemon.curspeed * stat_stage_multiplier[Trainer2.active_pokemon.speedstage]
-            if ((movejson[self.active_pokemon.moves[index-1]]['priority'] == movejson[Trainer2.active_pokemon.moves[index2-1]]['priority']) \
-                and ((pokemon1speed > pokemon2speed) or (pokemon1speed == pokemon2speed and random.random() > .5))) \
-                or (movejson[self.active_pokemon.moves[index-1]]['priority'] > movejson[Trainer2.active_pokemon.moves[index2-1]]['priority']):
-                #self trainer attacks first
-                if self.active_pokemon.check_attack_status(movejson[self.active_pokemon.moves[index-1]]):
-                    self.active_pokemon.attack_move(Trainer2.active_pokemon, index)
-                if self.active_pokemon.check_faint():
-                    break
-                if Trainer2.active_pokemon.check_faint(): 
-                    break
-                if Trainer2.active_pokemon.check_attack_status(movejson[Trainer2.active_pokemon.moves[index2-1]]):
-                    Trainer2.active_pokemon.attack_move(self.active_pokemon, index2)
-                if Trainer2.active_pokemon.check_faint(): 
-                    break
-                if self.active_pokemon.check_faint():
-                    break
+            #Trainer 1 makes their move
+            player1choice = int(input(self.getpromptstring()))
+            if player1choice == 1:
+                print("\nMoves for " + self.active_pokemon.name)
+                for i, x in enumerate(self.active_pokemon.moves):
+                    print(i+1, movejson[x]['name'])
+                index1 = int(input('Pick a move: '))
+            elif player1choice == 2 and len(self.alive_pokemon) > 1:
+                pindex1 = self.get_switch_pokemon_choice()
             else:
-                #trainer2 attacks first
-                if Trainer2.active_pokemon.check_attack_status(movejson[Trainer2.active_pokemon.moves[index2-1]]):
-                    Trainer2.active_pokemon.attack_move(self.active_pokemon, index2)
-                if Trainer2.active_pokemon.check_faint(): 
-                    break
-                if self.active_pokemon.check_faint():
-                    break
-                if self.active_pokemon.check_attack_status(movejson[self.active_pokemon.moves[index-1]]):
-                    self.active_pokemon.attack_move(Trainer2.active_pokemon, index)
-                if self.active_pokemon.check_faint():
-                    break
-                if Trainer2.active_pokemon.check_faint(): 
-                    break
+                print(self.name + ' ran away...took the L')
+                exit()
 
+            #Trainer 2 makes their move
+            player2choice = int(input(Trainer2.getpromptstring()))
+            if player2choice == 1:
+                print("\nMoves for " + Trainer2.active_pokemon.name)
+                for i, x in enumerate(Trainer2.active_pokemon.moves):
+                    print(i+1, movejson[x]['name'])
+                index2 = int(input('Pick a move: '))
+            elif player2choice == 2 and len(Trainer2.alive_pokemon) > 1:
+                pindex2 = Trainer2.get_switch_pokemon_choice()
+            else:
+                print(Trainer2.name + ' ran away...took the L')
+                exit()
             
+            if player1choice == 2 and player2choice == 2: #both players switch out
+                self.switch_pokemon(pindex1)
+                Trainer2.switch_pokemon(pindex2)
+            elif player1choice == 2: #only player2 attacks
+                self.switch_pokemon(pindex1)
+                Trainer2.attack(self, index2)
+            elif player2choice == 2: #player1 attacks
+                Trainer2.switch_pokemon(pindex2)
+                self.attack(Trainer2, index1)
+            else: #both attacks
+                #if outspeed opponent (for equal priority) or your move has higher priority, you go first. Otherwise opponent goes first. 50/50 if speed tie.
+                pokemon1speed = self.active_pokemon.curspeed * stat_stage_multiplier[self.active_pokemon.speedstage]
+                pokemon2speed = Trainer2.active_pokemon.curspeed * stat_stage_multiplier[Trainer2.active_pokemon.speedstage]
+                if ((movejson[self.active_pokemon.moves[index1-1]]['priority'] == movejson[Trainer2.active_pokemon.moves[index2-1]]['priority']) \
+                    and ((pokemon1speed > pokemon2speed) or (pokemon1speed == pokemon2speed and random.random() > .5))) \
+                    or (movejson[self.active_pokemon.moves[index1-1]]['priority'] > movejson[Trainer2.active_pokemon.moves[index2-1]]['priority']):
+                    #self trainer attacks first; if it kills, then trainer2 can't attack
+                    switch_flag = self.attack(Trainer2, index1)
+                    if switch_flag == 0:
+                        Trainer2.attack(self, index2)
+                else:
+                    #trainer2 attacks first
+                    switch_flag = Trainer2.attack(self, index2)
+                    if switch_flag == 0:
+                        self.attack(Trainer2, index1)
+                
             ### status damage
             self.active_pokemon.apply_status_damage()
             Trainer2.active_pokemon.apply_status_damage()
+
             if self.active_pokemon.check_faint():
-                break
-
+                self.update_fainted_pokemon()
+                if self.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    i = self.get_switch_pokemon_choice()
+                    self.switch_pokemon(i, 1)
             if Trainer2.active_pokemon.check_faint():
-                break
-
-
+                Trainer2.update_fainted_pokemon()
+                if Trainer2.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    i = Trainer2.get_switch_pokemon_choice()
+                    Trainer2.switch_pokemon(i, 1)
 
 
 if __name__ == '__main__':
