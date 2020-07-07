@@ -14,6 +14,8 @@ Move IDs found in `moves.json`, Pokemon numbers found `pokemon.json`. Venusaur.f
 
 # Status updates of project
 ```
+July 6: Implemented Trainer Class and functionality. Switch-in functions and checks implemented; not inserted in game logic yet
+
 June 30: Did lots of testing on stat and status moves. Fixed some mechanics (healing moves/critical hit) and bugs in accuracy. Added selfdestructing move mechanics for jokes. Added supported moves csv. Added more Pokemon samples to prepare for 6v6 implementation
 
 June 29: Added non damaging stat moves + non damaging status condition moves. Fixed some bugs for STAB, healing moves, and stat condition lists.

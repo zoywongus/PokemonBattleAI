@@ -249,7 +249,7 @@ class Pokemon:
         elif move_effect == 270:
             hurt = math.floor(damage / 2)
 
-        self.health -= hurt
+        self.curhealth -= hurt
         print(self.name + " was hurt " + str(hurt) + "HP (" + str(round(100*hurt/self.health, 2)) + "%) by recoil!")
 
     def calculate_weight_power(self, Pokemon2, move_effect):
@@ -382,7 +382,7 @@ class Pokemon:
 
     #Reset some modifiers when Pokemon is withdrawn
     def withdraw_pokemon(self):
-        self.confusion = False
+        self.confusion = self.flinch = False
         self.attackstage = self.defensestage = self.spattackstage = self.spdefensestage = \
             self.speedstage = self.accuracystage = 0
 
@@ -638,6 +638,126 @@ class Pokemon:
 
 
 
+class Trainer:
+    #pokemons is array of pokemon team
+    def __init__(self, pokemons, name):
+        if not(len(pokemons) >= 6):
+            print('Can only have team of up to 6 Pokemon')
+        elif len(pokemons) == 0:
+            print('Need pokemon in your team')
+
+        self.name = name
+        self.pokemons = pokemons
+        self.alive_pokemon = []
+        for p in self.pokemons:
+            self.alive_pokemon.append(p)
+        self.fainted_pokemon = []
+        self.active_pokemon = pokemons[0]
+
+    #returns whether trainer has lost match
+    def lost_match(self):
+        if len(self.alive_pokemon) == 0:
+            return True
+        return False
+
+
+    def switch_pokemon(self):
+        print('Select a Pokemon to switch (enter number): ')
+        for n in len(self.alive_pokemon):
+            p = self.alive_pokemon[n]
+            print(str(n+1) + ': ' + p.name + '\t\t' + p.curhealth + 'HP ' + p.get_status_string())
+
+        pindex = input('\nPokemon number: ')
+        p_selected = self.alive_pokemon[pindex-1]
+        self.active_pokemon.withdraw_pokemon()
+        print('\nWithdrew ' + self.current_pokemon.name + '! Sent out ' + p_selected.name + '!')
+        self.active_pokemon = p_selected
+        
+    
+    def fight(self, Trainer2):
+
+        # Initial battle text
+        print("-----POKEMONE BATTLE (LVL 50)-----")
+        trainer1text = self.name + " ( "
+        trainer2text = Trainer2.name + "  ( "
+        for p in self.pokemons:
+            trainer1text += p.name + " "
+        for p2 in Trainer2.pokemons:
+            trainer2text += p2.name + " "
+        trainer1text += " )"
+        trainer2text += " )"
+        print(trainer1text) 
+        print("-----------------VS----------------")
+        print(trainer2text)
+        
+        time.sleep(1)
+        
+        # Match loop
+        turn_number = 0
+        while not(self.lost_match()) or not(Trainer2.lost_match()):
+            #increment turn number; no Pokemon are flinched in the beginning
+            turn_number += 1
+            self.active_pokemon.flinch = Trainer2.active_pokemon.flinch = False
+
+            # Print turn and pokemon info
+            print("_____TURN #" + str(turn_number) + "_____")
+            print(self.active_pokemon.name ,"health:", self.active_pokemon.curhealth, self.active_pokemon.get_status_string())
+            print(Trainer2.active_pokemon.name ,"health:", Trainer2.active_pokemon.curhealth, Trainer2.active_pokemon.get_status_string())
+
+            print("\nMoves for " + self.active_pokemon.name)
+            for i, x in enumerate(self.active_pokemon.moves):
+                print(i+1, movejson[x]['name'])
+            index = int(input('Pick a move: '))
+
+            print("\nMoves for " + Trainer2.active_pokemon.name)
+            for i, x in enumerate(Trainer2.active_pokemon.moves):
+                print(i+1, movejson[x]['name'])
+            index2 = int(input('Pick a move: '))
+            
+            #if outspeed opponent (for equal priority) or your move has higher priority, you go first. Otherwise opponent goes first. 50/50 if speed tie.
+            pokemon1speed = self.active_pokemon.curspeed * stat_stage_multiplier[self.active_pokemon.speedstage]
+            pokemon2speed = Trainer2.active_pokemon.curspeed * stat_stage_multiplier[Trainer2.active_pokemon.speedstage]
+            if ((movejson[self.active_pokemon.moves[index-1]]['priority'] == movejson[Trainer2.active_pokemon.moves[index2-1]]['priority']) \
+                and ((pokemon1speed > pokemon2speed) or (pokemon1speed == pokemon2speed and random.random() > .5))) \
+                or (movejson[self.active_pokemon.moves[index-1]]['priority'] > movejson[Trainer2.active_pokemon.moves[index2-1]]['priority']):
+                #self trainer attacks first
+                if self.active_pokemon.check_attack_status(movejson[self.active_pokemon.moves[index-1]]):
+                    self.active_pokemon.attack_move(Trainer2.active_pokemon, index)
+                if self.active_pokemon.check_faint():
+                    break
+                if Trainer2.active_pokemon.check_faint(): 
+                    break
+                if Trainer2.active_pokemon.check_attack_status(movejson[Trainer2.active_pokemon.moves[index2-1]]):
+                    Trainer2.active_pokemon.attack_move(self.active_pokemon, index2)
+                if Trainer2.active_pokemon.check_faint(): 
+                    break
+                if self.active_pokemon.check_faint():
+                    break
+            else:
+                #trainer2 attacks first
+                if Trainer2.active_pokemon.check_attack_status(movejson[Trainer2.active_pokemon.moves[index2-1]]):
+                    Trainer2.active_pokemon.attack_move(self.active_pokemon, index2)
+                if Trainer2.active_pokemon.check_faint(): 
+                    break
+                if self.active_pokemon.check_faint():
+                    break
+                if self.active_pokemon.check_attack_status(movejson[self.active_pokemon.moves[index-1]]):
+                    self.active_pokemon.attack_move(Trainer2.active_pokemon, index)
+                if self.active_pokemon.check_faint():
+                    break
+                if Trainer2.active_pokemon.check_faint(): 
+                    break
+
+            
+            ### status damage
+            self.active_pokemon.apply_status_damage()
+            Trainer2.active_pokemon.apply_status_damage()
+            if self.active_pokemon.check_faint():
+                break
+
+            if Trainer2.active_pokemon.check_faint():
+                break
+
 
 
 
@@ -695,5 +815,12 @@ if __name__ == '__main__':
 
     p1 = Dusknoir
     p2 = Weavile
+    #p1.fight(p2) 
+
     #battle configuration
-    p1.fight(p2) 
+    team1 = [Gyarados, Mewtwo, Golem, Blastoise, Beedrill, Pidgeot]
+    team2 = [Pikachu, Infernape, Lucario, Sceptile, Snorlax, Charizard]
+
+    garyoak = Trainer(team1, 'Gary')
+    ashketchum = Trainer(team2, 'Ash')
+    garyoak.fight(ashketchum)
