@@ -868,6 +868,7 @@ if __name__ == '__main__':
     Tyranitar = Pokemon('248', ['468', '464', '504', '411']) #variety stat/damaging
     Palkia = Pokemon('484', ['410', '460', '347', '434']) #damaging w/effects
 
+    #Sample 3.0 --- Mix of Pokemon gen1-gen4
     Sceptile = Pokemon('254', ['348', '406', '235', '536'])
     Lucario = Pokemon('448', ['370', '183', '442', '14'])
     Infernape = Pokemon('392', ['53', '409', '595', '261'])
@@ -880,6 +881,15 @@ if __name__ == '__main__':
     Rayquaza = Pokemon('384', ['407', '403', '533', '434'])
     Gyarados = Pokemon('130', ['349', '350', '245', '127'])
     Weavile = Pokemon('461', ['420', '400', '136', '422'])
+    Bronzong = Pokemon('437', ['347','430', '60', '95'])
+    Dugtrio = Pokemon('51', ['89', '120', '29', '351'])
+    Hitmonchan = Pokemon('107', ['7', '8', '9', '24'])
+    Dragonite = Pokemon('149', ['245', '337', '434', '542'])
+    Salamence = Pokemon('373', ['304', '434', '56', '126'])
+    Steelix = Pokemon('208', ['89', '231', '422', '157'])
+    Spiritomb = Pokemon('442', ['247', '399', '105', '261'])
+    Raikou = Pokemon('243', ['85', '411', '326', '242'])
+    Deoxys = Pokemon('386', ['354', '58', '53', '412'])
     
 
     p1 = Dusknoir
