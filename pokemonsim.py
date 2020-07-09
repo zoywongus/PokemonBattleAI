@@ -37,6 +37,7 @@ class Status(enum.Enum):
     paralysis = 3
     burn = 4
     freeze = 5
+    bad_poison = 6
 
 def convert(basestats, level=50):
     s = {
@@ -121,6 +122,9 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     #eruption/water spout
     elif effect_number == 191:
         power *= Pokemon1.curhealth/Pokemon1.health
+    #recharge moves
+    elif effect_number == 81:
+        Pokemon1.recharge = move_info['id']
     #OHKO moves
     elif effect_number == 39 and not(move_effectiveness == 0):
         print("It's a one-hit KO!")
@@ -148,9 +152,8 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
 
     return damage
 
-# Delay en cada prit
+# Slow text
 def delay_print(s):
-    # Imprimir personaje uno por uno
     for c in s:
         sys.stdout.write(c)
         sys.stdout.flush()
@@ -173,7 +176,8 @@ class Pokemon:
         self.spdefense = self.curspdefense = level50stats['spdefense']
         self.speed = self.curspeed = level50stats['speed']
         self.health = self.curhealth = level50stats['hp']
-        self.confusion = self.flinch = False
+        self.confusion = self.flinch = self.cursed = False
+        self.recharge = self.charge = -1
         self.status = Status.none
         self.sleep_counter = self.confusion_counter = 0
         self.attackstage = self.defensestage = self.spattackstage = self.spdefensestage = self.speedstage = self.accuracystage = 0
@@ -363,6 +367,7 @@ class Pokemon:
         self.curhealth -= recoil
         print(self.name + " kept on going and crashed for " + str(recoil) + "HP (" + str(100*recoil/self.health) + "%) recoil damage!")
 
+    #apply status condition stuff end of turn
     def apply_status_damage(self):
         if self.status == Status.poison:
             print(self.name + " took damage from poison.")
@@ -370,6 +375,8 @@ class Pokemon:
         elif self.status == Status.burn:
             print(self.name + " took damage from burn.")
             self.curhealth -= math.floor(self.health / 16)
+        if self.cursed:
+            self.curhealth -= math.floor(self.health * 0.25)
 
     def apply_status_ailment(self, move_effect):
         if move_effect in burn_moves_list:
@@ -384,6 +391,14 @@ class Pokemon:
             return self.apply_sleep()
         elif move_effect in confusion_moves_list:
             return self.apply_confusion()
+        elif move_effect == 37: #tri attack
+            rnum = random.random()
+            if rnum <= 0.33:
+                return self.apply_burn()
+            elif rnum <= 0.67:
+                return self.apply_freeze()
+            else:
+                return self.apply_paralysis()
         return False
 
     def unapply_status_ailment(self):
@@ -442,9 +457,15 @@ class Pokemon:
             return True
         return False
 
+    def apply_curse(self, Pokemon2):
+        self.curhealth -= math.floor(0.5 * self.health)
+        Pokemon2.cursed = True
+        print(self.name + " cut its own HP and laid a curse on " + Pokemon2.name)
+
     #Reset some modifiers when Pokemon is withdrawn
     def withdraw_pokemon(self):
-        self.confusion = self.flinch = False
+        self.confusion = self.flinch = self.cursed = False
+        self.recharge = self.charge = -1
         self.attackstage = self.defensestage = self.spattackstage = self.spdefensestage = \
             self.speedstage = self.accuracystage = 0
 
@@ -554,8 +575,8 @@ class Pokemon:
                 if move_used['effect'] in flinch_moves_list:
                     if random.random()*100 < move_used['effect_chance']:
                         Pokemon2.flinch = True
-                #status effect moves (burn/poison/paralysis/freeze)
-                if move_used['effect'] in (burn_moves_list + freeze_moves_list + poison_moves_list + paralysis_moves_list):
+                #status effect moves (burn/poison/paralysis/freeze) or tri-attack
+                if move_used['effect'] in (burn_moves_list + freeze_moves_list + poison_moves_list + paralysis_moves_list + [37]):
                     if random.random()*100 < move_used['effect_chance']:
                         Pokemon2.apply_status_ailment(move_used['effect'])
                 #stat change moves (increase/decrease you/opponent)
@@ -585,8 +606,11 @@ class Pokemon:
                         return
                 elif move_used['effect'] in heal_moves_list:
                     self.calculate_heal(-1, move_used['effect'])
+                #ghost type using curse
+                if move_used['effect'] == 110 and (8 in self.types):
+                    self.apply_curse(Pokemon2)
                 #non-damaging stat moves (on attacker/defender)
-                if move_used['effect'] in stat_moves_attacker_list:
+                elif move_used['effect'] in stat_moves_attacker_list:
                     self.change_stat_stage(move_used['effect'])
                 if move_used['effect'] in stat_moves_defender_list and self.check_move_hit(move_used):
                     Pokemon2.change_stat_stage(move_used['effect'])
@@ -766,6 +790,11 @@ class Trainer:
     ## self trainer active pokemon attack Trainer2's active pokemon
     def attack(self, Trainer2, index):
         switched_flag = 0
+        if self.active_pokemon.recharge != -1:
+            print(self.active_pokemon.name + " has to recharge!")
+            self.active_pokemon.recharge = -1
+            return switched_flag
+
         if self.active_pokemon.check_attack_status(movejson[self.active_pokemon.moves[index-1]]):
             self.active_pokemon.attack_move(Trainer2.active_pokemon, index)
             if self.active_pokemon.check_faint():
@@ -809,7 +838,8 @@ class Trainer:
         # Match loop
         turn_number = 0
         while not(self.lost_match()) or not(Trainer2.lost_match()):
-            index1 = index2 = pindex1 = pindex2 = -10 #index for move chosen/pokemon swapped reset
+            index1 = index2 = pindex1 = pindex2 = \
+                player1choice = player2choice = -10 #index for move chosen/pokemon swapped reset
 
             #increment turn number; no Pokemon are flinched in the beginning
             turn_number += 1
@@ -818,32 +848,40 @@ class Trainer:
             # Print turn and pokemon info
             print("\n_____TURN #" + str(turn_number) + "_____")
 
-            #Trainer 1 makes their move
-            player1choice = int(input(self.getpromptstring()))
-            if player1choice == 1:
-                print("\nMoves for " + self.active_pokemon.name)
-                for i, x in enumerate(self.active_pokemon.moves):
-                    print(i+1, movejson[x]['name'])
-                index1 = int(input('Pick a move: '))
-            elif player1choice == 2 and len(self.alive_pokemon) > 1:
-                pindex1 = self.get_switch_pokemon_choice()
+            if self.active_pokemon.recharge == -1:
+                #Trainer 1 makes their move
+                player1choice = int(input(self.getpromptstring()))
+                if player1choice == 1:
+                    print("\nMoves for " + self.active_pokemon.name)
+                    for i, x in enumerate(self.active_pokemon.moves):
+                        print(i+1, movejson[x]['name'])
+                    index1 = int(input('Pick a move: '))
+                elif player1choice == 2 and len(self.alive_pokemon) > 1:
+                    pindex1 = self.get_switch_pokemon_choice()
+                else:
+                    print(self.name + ' ran away...took the L')
+                    exit()
             else:
-                print(self.name + ' ran away...took the L')
-                exit()
+                player1choice = 1
+                index1 = 1 
 
-            #Trainer 2 makes their move
-            player2choice = int(input(Trainer2.getpromptstring()))
-            if player2choice == 1:
-                print("\nMoves for " + Trainer2.active_pokemon.name)
-                for i, x in enumerate(Trainer2.active_pokemon.moves):
-                    print(i+1, movejson[x]['name'])
-                index2 = int(input('Pick a move: '))
-            elif player2choice == 2 and len(Trainer2.alive_pokemon) > 1:
-                pindex2 = Trainer2.get_switch_pokemon_choice()
+            if Trainer2.active_pokemon.recharge == -1:
+                #Trainer 2 makes their move
+                player2choice = int(input(Trainer2.getpromptstring()))
+                if player2choice == 1:
+                    print("\nMoves for " + Trainer2.active_pokemon.name)
+                    for i, x in enumerate(Trainer2.active_pokemon.moves):
+                        print(i+1, movejson[x]['name'])
+                    index2 = int(input('Pick a move: '))
+                elif player2choice == 2 and len(Trainer2.alive_pokemon) > 1:
+                    pindex2 = Trainer2.get_switch_pokemon_choice()
+                else:
+                    print(Trainer2.name + ' ran away...took the L')
+                    exit()
             else:
-                print(Trainer2.name + ' ran away...took the L')
-                exit()
-            
+                player2choice = 1
+                index2 = 1
+
             if player1choice == 2 and player2choice == 2: #both players switch out
                 self.switch_pokemon(pindex1)
                 Trainer2.switch_pokemon(pindex2)
@@ -952,6 +990,7 @@ if __name__ == '__main__':
     Spiritomb = Pokemon('442', ['247', '399', '105', '261'])
     Raikou = Pokemon('243', ['85', '411', '326', '242'])
     Deoxys = Pokemon('386', ['354', '58', '53', '412'])
+    Marshtomp = Pokemon('259', ['482', '308', '414', '92'])
     
 
     p1 = Dusknoir
@@ -959,7 +998,7 @@ if __name__ == '__main__':
     #p1.fight(p2) 
 
     #battle configuration
-    team1 = [Gyarados, Mewtwo, Golem, Blastoise, Beedrill, Pidgeot]
+    team1 = [Marshtomp, Mewtwo, Golem, Blastoise, Beedrill, Pidgeot]
     team2 = [Pikachu, Infernape, Lucario, Sceptile, Snorlax, Charizard]
 
     garyoak = Trainer(team1, 'Gary')

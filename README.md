@@ -14,6 +14,7 @@ Move IDs found in `moves.json`, Pokemon numbers found `pokemon.json`. Venusaur.f
 
 # Status updates of project
 ```
+July 9: Added effects for recharging moves/tri-attack/curse
 July 8: Implemented various moves and move effects for semi-common moves
 July 7: Finished 6v6 implementation (did some testing battles). Updated input/output interface.
 July 6: Implemented Trainer Class and functionality. Switch-in functions and checks implemented; not inserted in game logic yet
