@@ -49,22 +49,86 @@ def convert(basestats, level=50):
     }
     return s
 
+#Pokemon1 using move_info on Pokemon2
 def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     critical = weather = burnstatus = other = stab = 1
     crit_chance = 0.035 #0.0625 pseudo random generator makes the default too high rate
     power = move_info['power']
+    effect_number = move_info['effect']
     attack = Pokemon1.attack * stat_stage_multiplier[Pokemon1.attackstage]
     defense = Pokemon2.defense * stat_stage_multiplier[Pokemon2.defensestage]
-    if move_info['damage_class'] == 'special':
+    if move_info['damage_class'] == 'special': 
         attack = Pokemon1.spattack * stat_stage_multiplier[Pokemon1.spattackstage]
         defense = Pokemon2.spdefense * stat_stage_multiplier[Pokemon2.spdefensestage]
 
     if Pokemon1.status == Status.burn and move_info['damage_class'] == 'physical':
         burnstatus = 0.5
+    
+    #####special move effects altering power########
+    p1_hp_percentage = 100 * Pokemon1.curhealth/Pokemon1.health
+    p2_hp_percentage = 100 * Pokemon2.curhealth/Pokemon2.health
+    #flail/reversal
+    if effect_number == 100:
+        if p1_hp_percentage < 4.17:
+            power = 200
+        elif p1_hp_percentage < 10.42:
+            power = 150
+        elif p1_hp_percentage < 20.83:
+            power = 100
+        elif p1_hp_percentage < 35.42:
+            power = 80
+        elif p1_hp_percentage < 68.75:
+            power = 40
+        else:
+            power = 20
+    #acrobatics
+    elif effect_number == 318: 
+        power *= 2
+    #brine
+    elif effect_number == 222 and p2_hp_percentage <= 50:
+        power *= 2
+    #sp.moves that target physical
+    elif effect_number == 283:
+        defense = Pokemon2.defense * stat_stage_multiplier[Pokemon2.defensestage]
+    #weight-based moves
+    elif effect_number in weight_moves_list:
+        power = Pokemon1.calculate_weight_power(Pokemon2, effect_number)
+    #endeavor
+    elif effect_number == 190 and not(move_effectiveness == 0):
+        return max(0, Pokemon2.curhealth - Pokemon1.curhealth)
+    #facade
+    elif effect_number == 170 and not(Pokemon1.status == Status.none):
+        power *= 2
+    #foul play
+    elif effect_number == 298:
+        attack = Pokemon2.attack * stat_stage_multiplier[Pokemon2.attackstage]
+    #hex
+    elif effect_number == 311 and not(Pokemon2.status == Status.none):
+        power *= 2
+    #venoshock
+    elif effect_number == 284 and Pokemon2.status == Status.poison:
+        power *= 2
+    #stored power
+    elif effect_number == 306:
+        power += (max(0, Pokemon1.attackstage) + max(0, Pokemon1.spattackstage) + max(0, Pokemon1.defensestage) + max(0, Pokemon1.spdefensestage) \
+            + max(0, Pokemon1.speedstage) + max(0, Pokemon1.accuracystage)) * 20
+    #wake-up slap
+    elif effect_number == 218 and Pokemon2.status == Status.sleep:
+        Pokemon2.sleep_counter = 0
+        Pokemon2.status = Status.none
+        print(Pokemon2.name + " has woke up!")
+        power *= 2
+    #eruption/water spout
+    elif effect_number == 191:
+        power *= Pokemon1.curhealth/Pokemon1.health
+    #OHKO moves
+    elif effect_number == 39 and not(move_effectiveness == 0):
+        print("It's a one-hit KO!")
+        return Pokemon2.curhealth
 
-    if move_info['effect'] == 289: #100% critical hit moves
+    if effect_number == 289: #100% critical hit moves
         crit_chance = 1
-    elif move_info['effect'] == 44 or move_info['effect'] == 201 or move_info['effect'] == 210: #increased crit rate
+    elif effect_number == 44 or effect_number == 201 or effect_number == 210: #increased crit rate
         crit_chance = 0.125
     
     if random.random() <= crit_chance:
@@ -74,12 +138,10 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     if str(move_info['type']) in pokemonjson[Pokemon1.id]['types']:
         stab = 1.5
 
-    if move_info['effect'] in weight_moves_list:
-        power = Pokemon1.calculate_weight_power(Pokemon2, move_info['effect'])
-    elif move_info['effect'] == 255: #struggle
+    
+    if effect_number == 255: #struggle
         move_effectiveness = 1
-    elif move_info['effect'] == 318: #acrobatics
-        power *= 2
+    
 
     modifier = weather * critical * burnstatus * (random.randint(85,100)*0.01) * stab * move_effectiveness * other
     damage = (((22*power*attack/defense) / 50) + 2) * modifier

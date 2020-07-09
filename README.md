@@ -14,22 +14,15 @@ Move IDs found in `moves.json`, Pokemon numbers found `pokemon.json`. Venusaur.f
 
 # Status updates of project
 ```
+July 8: Implemented various moves and move effects for semi-common moves
 July 7: Finished 6v6 implementation (did some testing battles). Updated input/output interface.
-
 July 6: Implemented Trainer Class and functionality. Switch-in functions and checks implemented; not inserted in game logic yet
-
 June 30: Did lots of testing on stat and status moves. Fixed some mechanics (healing moves/critical hit) and bugs in accuracy. Added selfdestructing move mechanics for jokes. Added supported moves csv. Added more Pokemon samples to prepare for 6v6 implementation
-
 June 29: Added non damaging stat moves + non damaging status condition moves. Fixed some bugs for STAB, healing moves, and stat condition lists.
-
 June 24: 1v1 battling works (some move effects not implemented yet - still need more tests). Added some Pokemon to test around. Level 50 stats now automatically calculated for each Pokemon. 
-
 June 23 (II): Status moves should be fully implemented now. Stat boosting moves should be fully implemented. Basic 1v1 mechanics should be complete. Basic non-damaging moves not in effect yet. Maybe test a bit more
-
 June 23: Added confusion effects to moves. Mechanics for acrobatics/struggle implemented. Implemented recoil-on-miss mechanics. Confusion moves and mechanics seem to be working.
-
 June 22: Added critical hit chances. Added mechanics for status conditions, and updated turn structuring. Did not fully test status moves yet (still have to update move effects)
-
 June 19: Updated some special/physical distinguishment. Updated attack damage calculations a bit
 ```
 
@@ -38,14 +31,14 @@ Data files based from https://github.com/fonse/pokemon-battle
 Backbone skeleton turn based battling and classes from https://github.com/cesaralvrz/Pokemon-Battle-Simulator
 
 ## Todo
+Add badly poisoning mechanics/curse mechanics/recharge mechanics (recharge + badly poisoning not really needed, but some common moves use them)
 Make simulation code/structure/documentation look prettier
 Can enter game from different states of Pokemons if needed for AI
 Can log game progress into files/variables if needed for AI
 
-Final plan is not too complex (no dig/fly mechanics and maybe no weather?)
-
 ## To test
 random game mechanics in 6v6 that might have been missed earlier
+new move mechanics?
 
 ### Translations to Keep Track?
 Note: all will use level 50 defaults 0EV/0IV so just round down each calculation

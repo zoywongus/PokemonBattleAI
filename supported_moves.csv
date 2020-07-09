@@ -211,14 +211,14 @@ Stockpile,
 Heat Wave,
 Flatter,
 Will-O-Wisp,
-Facade,effect not supported
+Facade
 Focus Punch,effect not supported
 Charge,
 Superpower,
 Revenge,effect not supported
 Brick Break,effect not supported
 Knock Off,effect not supported
-Eruption,effect not supported
+Eruption,
 Snatch,
 Dive,
 Arm Thrust,
@@ -248,7 +248,7 @@ Metal Sound,
 Grass Whistle,
 Tickle,
 Cosmic Power,
-Water Spout,effect not supported
+Water Spout,
 Signal Beam,
 Shadow Punch,
 Extrasensory,
@@ -277,10 +277,10 @@ Water Pulse,
 Doom Desire,effect not supported
 Psycho Boost,
 Roost,
-Wake-Up Slap,effect not supported
+Wake-Up Slap,
 Hammer Arm,
 Gyro Ball,
-Brine,effect not supported
+Brine,
 Feint,effect not supported
 Pluck,effect not supported
 U-turn,effect not supported
@@ -361,10 +361,10 @@ Ominous Wind,
 Shadow Force,effect not supported
 Hone Claws,
 Psyshock,
-Venoshock,effect not supported
+Venoshock,
 Autotomize,
 Smack Down,effect not supported
-Storm Throw,effect not supported
+Storm Throw,
 Flame Burst,
 Sludge Wave,
 Quiver Dance,
@@ -374,14 +374,14 @@ Flame Charge,
 Coil,
 Low Sweep,
 Acid Spray,
-Foul Play,effect not supported
+Foul Play,
 Round,effect not supported
 Echoed Voice,
 Chip Away,
-Stored Power,effect not supported
+Stored Power,
 Scald,
 Shell Smash,
-Hex,effect not supported
+Hex,
 Sky Drop,effect not supported
 Shift Gear,
 Circle Throw,
@@ -411,7 +411,7 @@ Leaf Tornado,
 Steamroller,
 Cotton Guard,
 Night Daze,
-Psystrike,effect not supported
+Psystrike
 Tail Slap,
 Hurricane,
 Head Charge,
@@ -419,7 +419,7 @@ Gear Grind,
 Searing Shot,
 Techno Blast,effect not supported
 Relic Song,effect not supported
-Secret Sword,effect not supported
+Secret Sword
 Glaciate,
 Bolt Strike,
 Blue Flare,
@@ -454,3 +454,8 @@ Power-Up Punch,
 Oblivion Wing,
 Explosion,
 Self-Destruct,
+Endeavor,
+Flail,
+Sheer Cold,
+Fissure,
+Horn Drill
