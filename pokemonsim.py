@@ -51,6 +51,7 @@ def convert(basestats, level=50):
     return s
 
 #Pokemon1 using move_info on Pokemon2
+#returns amount of HP damage Pokemon2 takes
 def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     critical = weather = burnstatus = other = stab = 1
     crit_chance = 0.035 #0.0625 pseudo random generator makes the default too high rate
@@ -97,6 +98,15 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     #endeavor
     elif effect_number == 190 and not(move_effectiveness == 0):
         return max(0, Pokemon2.curhealth - Pokemon1.curhealth)
+    #dragon rage
+    elif effect_number == 42 and not(move_effectiveness == 0):
+        return 40
+    #sonic boom
+    elif effect_number == 131 and not(move_effectiveness == 0):
+        return 20
+    #seismic toss
+    elif effect_number == 88 and not(move_effectiveness == 0):
+        return Pokemon2.level
     #facade
     elif effect_number == 170 and not(Pokemon1.status == Status.none):
         power *= 2
@@ -107,7 +117,7 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     elif effect_number == 311 and not(Pokemon2.status == Status.none):
         power *= 2
     #venoshock
-    elif effect_number == 284 and Pokemon2.status == Status.poison:
+    elif effect_number == 284 and (Pokemon2.status == Status.poison or Pokemon2.status == Status.bad_poison):
         power *= 2
     #stored power
     elif effect_number == 306:
@@ -161,14 +171,15 @@ def delay_print(s):
 
 # Creation Pokemon
 class Pokemon:
-    def __init__(self, nameid, moves):
+    def __init__(self, nameid, moves, level=50):
         # Guardar variables como atributos
         self.id = nameid
+        self.level = level
         self.name = pokemonjson[nameid]['name']
         self.types = pokemonjson[nameid]['types']
         self.moves = moves
         basestats = pokemonjson[nameid]['stats']
-        level50stats = convert(basestats)
+        level50stats = convert(basestats, level)
         #set base stats
         self.attack = self.curattack = level50stats['attack']
         self.spattack = self.curspattack = level50stats['spattack']
@@ -179,7 +190,7 @@ class Pokemon:
         self.confusion = self.flinch = self.cursed = False
         self.recharge = self.charge = -1
         self.status = Status.none
-        self.sleep_counter = self.confusion_counter = 0
+        self.sleep_counter = self.confusion_counter = self.badpoison_counter = 0
         self.attackstage = self.defensestage = self.spattackstage = self.spdefensestage = self.speedstage = self.accuracystage = 0
 
         #might change up something to avoid this
@@ -300,7 +311,7 @@ class Pokemon:
             return "[FRZ]"
         elif self.status == Status.burn:
             return "[BRN]"
-        elif self.status == Status.poison:
+        elif self.status == Status.poison or self.status == Status.bad_poison:
             return "[PSN]"
         elif self.status == Status.sleep:
             return "[SLP]"
@@ -372,6 +383,10 @@ class Pokemon:
         if self.status == Status.poison:
             print(self.name + " took damage from poison.")
             self.curhealth -= math.floor(self.health / 8)
+        elif self.status == Status.bad_poison:
+            print(self.name + " took damage from poison.")
+            self.curhealth -= (math.floor(self.health / 16) * self.badpoison_counter)
+            self.badpoison_counter += 1
         elif self.status == Status.burn:
             print(self.name + " took damage from burn.")
             self.curhealth -= math.floor(self.health / 16)
@@ -382,7 +397,7 @@ class Pokemon:
         if move_effect in burn_moves_list:
             return self.apply_burn()
         elif move_effect in poison_moves_list:
-            return self.apply_poison()
+            return self.apply_poison(move_effect)
         elif move_effect in freeze_moves_list:
             return self.apply_freeze()
         elif move_effect in paralysis_moves_list:
@@ -428,10 +443,16 @@ class Pokemon:
             return True
         return False
 
-    def apply_poison(self):
+    #both regular and bad poison
+    def apply_poison(self, effect_num):
         if self.check_status_affect(Status.poison):
-            self.status = Status.poison
-            print(self.name + " is poisoned!")
+            if effect_num == 34:
+                self.status = Status.bad_poison
+                self.badpoison_counter = 1
+                print(self.name + " is badly poisoned!")
+            else:
+                self.status = Status.poison
+                print(self.name + " is poisoned!")
             return True
         return False
 
@@ -466,6 +487,7 @@ class Pokemon:
     def withdraw_pokemon(self):
         self.confusion = self.flinch = self.cursed = False
         self.recharge = self.charge = -1
+        self.badpoison_counter = 1
         self.attackstage = self.defensestage = self.spattackstage = self.spdefensestage = \
             self.speedstage = self.accuracystage = 0
 

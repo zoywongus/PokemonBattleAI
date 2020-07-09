@@ -14,7 +14,7 @@ Move IDs found in `moves.json`, Pokemon numbers found `pokemon.json`. Venusaur.f
 
 # Status updates of project
 ```
-July 9: Added effects for recharging moves/tri-attack/curse
+July 9: Added effects for recharging moves/tri-attack/curse/dragon rage/sonic boom, added badly poison mechanics
 July 8: Implemented various moves and move effects for semi-common moves
 July 7: Finished 6v6 implementation (did some testing battles). Updated input/output interface.
 July 6: Implemented Trainer Class and functionality. Switch-in functions and checks implemented; not inserted in game logic yet
@@ -32,10 +32,10 @@ Data files based from https://github.com/fonse/pokemon-battle
 Backbone skeleton turn based battling and classes from https://github.com/cesaralvrz/Pokemon-Battle-Simulator
 
 ## Todo
-Add badly poisoning mechanics/curse mechanics/recharge mechanics (recharge + badly poisoning not really needed, but some common moves use them)
 Make simulation code/structure/documentation look prettier
 Can enter game from different states of Pokemons if needed for AI
 Can log game progress into files/variables if needed for AI
+Add mechanics for charging moves (sky attack)/locked-in moves (outrage)/ switching moves (u-turn/batonpass/roar/dragon tail)????? if needed?????
 
 ## To test
 random game mechanics in 6v6 that might have been missed earlier

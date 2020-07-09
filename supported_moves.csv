@@ -84,7 +84,7 @@ Thunder,
 Rock Throw,
 Earthquake,
 Dig,
-Toxic,badly poison -> poison
+Toxic,
 Confusion,
 Psychic,
 Hypnosis,
@@ -458,4 +458,5 @@ Endeavor,
 Flail,
 Sheer Cold,
 Fissure,
-Horn Drill
+Horn Drill,
+Dragon Rage
