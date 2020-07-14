@@ -1347,17 +1347,23 @@ if __name__ == '__main__':
     team1 = [Marshtomp, Mewtwo, Golem, Blastoise, Beedrill, Pidgeot]
     team2 = [Pikachu, Infernape, Lucario, Sceptile, Snorlax, Charizard]
 
+    greedy = False
+    smartgreedy = False
+    baseCode = False
     # Cofig for greedy approach
-    # garyoak = Trainer(team1, 'Gary')
-    # ashketchum = Trainer(team2, 'Ash')
-    # garyoak.greedyfight(ashketchum)
+    if greedy
+        garyoak = Trainer(team1, 'Gary')
+        ashketchum = Trainer(team2, 'Ash')
+        garyoak.greedyfight(ashketchum)
 
     # Config for Smarter greedy
-    garyoak = Trainer(team1, 'Gary')
-    ashketchum = Trainer(team2, 'Ash')
-    garyoak.smartgreedyfight(ashketchum)
+    if smartgreedy:
+        garyoak = Trainer(team1, 'Gary')
+        ashketchum = Trainer(team2, 'Ash')
+        garyoak.smartgreedyfight(ashketchum)
 
-
-    # garyoak = Trainer(team1, 'Gary')
-    # ashketchum = Trainer(team2, 'Ash')
-    # garyoak.fight(ashketchum)
+    # Config for the original baseCode
+    if baseCode:
+        garyoak = Trainer(team1, 'Gary')
+        ashketchum = Trainer(team2, 'Ash')
+        garyoak.fight(ashketchum)
