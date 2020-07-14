@@ -59,13 +59,13 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     effect_number = move_info['effect']
     attack = Pokemon1.attack * stat_stage_multiplier[Pokemon1.attackstage]
     defense = Pokemon2.defense * stat_stage_multiplier[Pokemon2.defensestage]
-    if move_info['damage_class'] == 'special': 
+    if move_info['damage_class'] == 'special':
         attack = Pokemon1.spattack * stat_stage_multiplier[Pokemon1.spattackstage]
         defense = Pokemon2.spdefense * stat_stage_multiplier[Pokemon2.spdefensestage]
 
     if Pokemon1.status == Status.burn and move_info['damage_class'] == 'physical':
         burnstatus = 0.5
-    
+
     #####special move effects altering power########
     p1_hp_percentage = 100 * Pokemon1.curhealth/Pokemon1.health
     p2_hp_percentage = 100 * Pokemon2.curhealth/Pokemon2.health
@@ -84,7 +84,7 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
         else:
             power = 20
     #acrobatics
-    elif effect_number == 318: 
+    elif effect_number == 318:
         power *= 2
     #brine
     elif effect_number == 222 and p2_hp_percentage <= 50:
@@ -144,7 +144,7 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
         crit_chance = 1
     elif effect_number == 44 or effect_number == 201 or effect_number == 210: #increased crit rate
         crit_chance = 0.125
-    
+
     if random.random() <= crit_chance:
         print("A critical hit!")
         critical = 2
@@ -152,10 +152,10 @@ def calculate_damage(Pokemon1, Pokemon2, move_info, move_effectiveness):
     if str(move_info['type']) in pokemonjson[Pokemon1.id]['types']:
         stab = 1.5
 
-    
+
     if effect_number == 255: #struggle
         move_effectiveness = 1
-    
+
 
     modifier = weather * critical * burnstatus * (random.randint(85,100)*0.01) * stab * move_effectiveness * other
     damage = (((22*power*attack/defense) / 50) + 2) * modifier
@@ -286,7 +286,7 @@ class Pokemon:
         if move_effect in [322]:
             self.spattackstage = min(6, self.spattackstage + 3)
             stat_string += self.name + "'s special attack rose drastically!\n"
-        
+
 
         print(stat_string)
 
@@ -419,7 +419,7 @@ class Pokemon:
     def unapply_status_ailment(self):
         self.status = Status.none
         print(self.name + "'s status is restored")
-    
+
     #applies paralysis and speed change; might need to apply speed change when pokemon exits and re-enters...
     def apply_paralysis(self):
         #can't be paralyzed if already affected by status condition or if ground type
@@ -429,7 +429,7 @@ class Pokemon:
             print(self.name + " is paralyzed! It may not be able to move!")
             return True
         return False
-    
+
     #unapplies paralysis/speed change
     def unapply_paralysis(self):
         self.status = Status.none
@@ -462,7 +462,7 @@ class Pokemon:
             print(self.name + " is frozen!")
             return True
         return False
-    
+
     def apply_burn(self):
         if self.check_status_affect(Status.burn):
             self.status = Status.burn
@@ -537,7 +537,7 @@ class Pokemon:
             return False
 
         return True
-    
+
     def attack_move(self, Pokemon2, index):
         #####self.attack(Pokemon2)
             move_used = movejson[self.moves[index-1]]
@@ -647,7 +647,7 @@ class Pokemon:
                             print(Pokemon2.name + " is not affected!")
                     else:
                         print("The attack missed!")
-                
+
             return
 
 
@@ -675,10 +675,10 @@ class Pokemon:
         print("SP ATTACK/", Pokemon2.spattack)
         print("SP DEFENSE/", Pokemon2.spdefense)
         print("SPEED/", Pokemon2.speed, '\n')
-        
+
 
         time.sleep(1)
-        
+
         # Bucle while mientras tengan vida cada Pokémon
         turn_number = 0
         while (self.curhealth > 0) and (Pokemon2.curhealth > 0):
@@ -700,7 +700,7 @@ class Pokemon:
             for i, x in enumerate(Pokemon2.moves):
                 print(i+1, movejson[x]['name'])
             index2 = int(input('Pick a move: '))
-            
+
             #if outspeed opponent (for equal priority) or your move has higher priority, you go first. Otherwise opponent goes first. 50/50 if speed tie.
             pokemon1speed = self.curspeed * stat_stage_multiplier[self.speedstage]
             pokemon2speed = Pokemon2.curspeed * stat_stage_multiplier[Pokemon2.speedstage]
@@ -712,18 +712,18 @@ class Pokemon:
                     self.attack_move(Pokemon2, index)
                 if self.check_faint():
                     break
-                if Pokemon2.check_faint(): 
+                if Pokemon2.check_faint():
                     break
                 if Pokemon2.check_attack_status(movejson[Pokemon2.moves[index2-1]]):
                     Pokemon2.attack_move(self, index2)
-                if Pokemon2.check_faint(): 
+                if Pokemon2.check_faint():
                     break
                 if self.check_faint():
                     break
             else:
                 if Pokemon2.check_attack_status(movejson[Pokemon2.moves[index2-1]]):
                     Pokemon2.attack_move(self, index2)
-                if Pokemon2.check_faint(): 
+                if Pokemon2.check_faint():
                     break
                 if self.check_faint():
                     break
@@ -731,10 +731,10 @@ class Pokemon:
                     self.attack_move(Pokemon2, index)
                 if self.check_faint():
                     break
-                if Pokemon2.check_faint(): 
+                if Pokemon2.check_faint():
                     break
 
-            
+
             ### status damage
             self.apply_status_damage()
             Pokemon2.apply_status_damage()
@@ -743,7 +743,6 @@ class Pokemon:
 
             if Pokemon2.check_faint():
                 break
-
 
 
 class Trainer:
@@ -808,7 +807,7 @@ class Trainer:
         else:
             print('\n' + self.name + ' sent out ' + p_selected.name + '!')
         self.active_pokemon = p_selected
-    
+
     ## self trainer active pokemon attack Trainer2's active pokemon
     def attack(self, Trainer2, index):
         switched_flag = 0
@@ -827,7 +826,7 @@ class Trainer:
                 else:
                     i = self.get_switch_pokemon_choice()
                     self.switch_pokemon(i, 1)
-            if Trainer2.active_pokemon.check_faint(): 
+            if Trainer2.active_pokemon.check_faint():
                 Trainer2.update_fainted_pokemon()
                 switched_flag = 1
                 if Trainer2.lost_match():
@@ -836,7 +835,7 @@ class Trainer:
                 else:
                     i = Trainer2.get_switch_pokemon_choice()
                     Trainer2.switch_pokemon(i, 1)
-        
+
         return switched_flag
 
     def fight(self, Trainer2):
@@ -851,12 +850,12 @@ class Trainer:
             trainer2text += p2.name + " "
         trainer1text += " )"
         trainer2text += " )"
-        print(trainer1text) 
+        print(trainer1text)
         print("-----------------VS----------------")
         print(trainer2text)
-        
+
         time.sleep(1)
-               
+
         # Match loop
         turn_number = 0
         while not(self.lost_match()) or not(Trainer2.lost_match()):
@@ -885,7 +884,7 @@ class Trainer:
                     exit()
             else:
                 player1choice = 1
-                index1 = 1 
+                index1 = 1
 
             if Trainer2.active_pokemon.recharge == -1:
                 #Trainer 2 makes their move
@@ -929,7 +928,7 @@ class Trainer:
                     switch_flag = Trainer2.attack(self, index2)
                     if switch_flag == 0:
                         self.attack(Trainer2, index1)
-                
+
             ### status damage
             self.active_pokemon.apply_status_damage()
             Trainer2.active_pokemon.apply_status_damage()
@@ -952,15 +951,340 @@ class Trainer:
                     Trainer2.switch_pokemon(i, 1)
 
 
+    def greedyattack(self, Trainer2, index):
+        switched_flag = 0
+        if self.active_pokemon.recharge != -1:
+            print(self.active_pokemon.name + " has to recharge!")
+            self.active_pokemon.recharge = -1
+            return switched_flag
+
+        if self.active_pokemon.check_attack_status(movejson[self.active_pokemon.moves[index-1]]):
+            self.active_pokemon.attack_move(Trainer2.active_pokemon, index)
+            if self.active_pokemon.check_faint():
+                self.update_fainted_pokemon()
+                if self.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    i = self.get_switch_pokemon_choice()
+                    self.switch_pokemon(i, 1)
+            if Trainer2.active_pokemon.check_faint():
+                Trainer2.update_fainted_pokemon()
+                switched_flag = 1
+                if Trainer2.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    # Always 1 for bot
+                    i = 1
+                    Trainer2.switch_pokemon(i, 1)
+
+        return switched_flag
+
+
+    def greedyfight(self, Trainer2):
+
+        # Initial battle text
+        print("-----POKEMONE BATTLE (LVL 50)-----")
+        trainer1text = self.name + " ( "
+        trainer2text = Trainer2.name + "  ( "
+        for p in self.pokemons:
+            trainer1text += p.name + " "
+        for p2 in Trainer2.pokemons:
+            trainer2text += p2.name + " "
+        trainer1text += " )"
+        trainer2text += " )"
+        print(trainer1text)
+        print("-----------------VS----------------")
+        print(trainer2text)
+
+        time.sleep(1)
+
+        # Match loop
+        turn_number = 0
+        while not(self.lost_match()) or not(Trainer2.lost_match()):
+            index1 = index2 = pindex1 = pindex2 = \
+                player1choice = player2choice = -10 #index for move chosen/pokemon swapped reset
+
+            #increment turn number; no Pokemon are flinched in the beginning
+            turn_number += 1
+            self.active_pokemon.flinch = Trainer2.active_pokemon.flinch = False
+
+            # Print turn and pokemon info
+            print("\n_____TURN #" + str(turn_number) + "_____")
+
+            if self.active_pokemon.recharge == -1:
+                #Trainer 1 makes their move
+                player1choice = int(input(self.getpromptstring()))
+                if player1choice == 1:
+                    print("\nMoves for " + self.active_pokemon.name)
+                    for i, x in enumerate(self.active_pokemon.moves):
+                        print(i+1, movejson[x]['name'])
+                    index1 = int(input('Pick a move: '))
+                elif player1choice == 2 and len(self.alive_pokemon) > 1:
+                    pindex1 = self.get_switch_pokemon_choice()
+                else:
+                    print(self.name + ' ran away...took the L')
+                    exit()
+            else:
+                player1choice = 1
+                index1 = 1
+
+            if Trainer2.active_pokemon.recharge == -1:
+                #Trainer 2 makes their move
+                print("Bot Chooses Action to Fight")
+                player2choice = 1
+                if player2choice == 1:
+                    print("\nMoves for " + Trainer2.active_pokemon.name)
+                    for i, x in enumerate(Trainer2.active_pokemon.moves):
+                        print(i+1, movejson[x]['name'])
+
+                    maxIndex = 1
+                    move_used = movejson[Trainer2.active_pokemon.moves[i-1]]
+                    maxpower = move_used['power']
+                    for i in range(2, 5):
+                        move_used = movejson[Trainer2.active_pokemon.moves[i-1]]
+                        power = move_used['power']
+                        if power > maxpower:
+                            maxIndex = i
+                            maxpower = power
+                    index2 = maxIndex
+                    print(f'Picking The GreedyAttack move: {index2}')
+                elif player2choice == 2 and len(Trainer2.alive_pokemon) > 1:
+                    # 1 to be default for Bot
+                    # pindex2 = Trainer2.get_switch_pokemon_choice()
+                    pindex2 = 1
+                else:
+                    print(Trainer2.name + ' ran away...took the L')
+                    exit()
+            else:
+                player2choice = 1
+                index2 = 1
+
+            if player1choice == 2 and player2choice == 2: #both players switch out
+                self.switch_pokemon(pindex1)
+                Trainer2.switch_pokemon(pindex2)
+            elif player1choice == 2: #only player2 attacks
+                self.switch_pokemon(pindex1)
+                Trainer2.greedyattack(self, index2)
+            elif player2choice == 2: #player1 attacks
+                Trainer2.switch_pokemon(pindex2)
+                self.greedyattack(Trainer2, index1)
+            else: #both attacks
+                #if outspeed opponent (for equal priority) or your move has higher priority, you go first. Otherwise opponent goes first. 50/50 if speed tie.
+                pokemon1speed = self.active_pokemon.curspeed * stat_stage_multiplier[self.active_pokemon.speedstage]
+                pokemon2speed = Trainer2.active_pokemon.curspeed * stat_stage_multiplier[Trainer2.active_pokemon.speedstage]
+                if ((movejson[self.active_pokemon.moves[index1-1]]['priority'] == movejson[Trainer2.active_pokemon.moves[index2-1]]['priority']) \
+                    and ((pokemon1speed > pokemon2speed) or (pokemon1speed == pokemon2speed and random.random() > .5))) \
+                    or (movejson[self.active_pokemon.moves[index1-1]]['priority'] > movejson[Trainer2.active_pokemon.moves[index2-1]]['priority']):
+                    #self trainer attacks first; if it kills, then trainer2 can't attack
+                    switch_flag = self.attack(Trainer2, index1)
+                    if switch_flag == 0:
+                        Trainer2.greedyattack(self, index2)
+                else:
+                    #trainer2 attacks first
+                    switch_flag = Trainer2.attack(self, index2)
+                    if switch_flag == 0:
+                        self.greedyattack(Trainer2, index1)
+
+            ### status damage
+            self.active_pokemon.apply_status_damage()
+            Trainer2.active_pokemon.apply_status_damage()
+
+            if self.active_pokemon.check_faint():
+                self.update_fainted_pokemon()
+                if self.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    i = self.get_switch_pokemon_choice()
+                    self.switch_pokemon(i, 1)
+            if Trainer2.active_pokemon.check_faint():
+                Trainer2.update_fainted_pokemon()
+                if Trainer2.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    # 1 to be default for Bot
+                    # i = Trainer2.get_switch_pokemon_choice()
+                    i = 1
+                    Trainer2.switch_pokemon(i, 1)
+
+    def smartgreedyattack(self, Trainer2, index):
+        switched_flag = 0
+        if self.active_pokemon.recharge != -1:
+            print(self.active_pokemon.name + " has to recharge!")
+            self.active_pokemon.recharge = -1
+            return switched_flag
+
+        if self.active_pokemon.check_attack_status(movejson[self.active_pokemon.moves[index-1]]):
+            self.active_pokemon.attack_move(Trainer2.active_pokemon, index)
+            if self.active_pokemon.check_faint():
+                self.update_fainted_pokemon()
+                if self.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    i = self.get_switch_pokemon_choice()
+                    self.switch_pokemon(i, 1)
+            if Trainer2.active_pokemon.check_faint():
+                Trainer2.update_fainted_pokemon()
+                switched_flag = 1
+                if Trainer2.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    # Always 1 for bot
+                    i = 1
+                    Trainer2.switch_pokemon(i, 1)
+
+        return switched_flag
+
+
+    def smartgreedyfight(self, Trainer2):
+
+        # Initial battle text
+        print("-----POKEMONE BATTLE (LVL 50)-----")
+        trainer1text = self.name + " ( "
+        trainer2text = Trainer2.name + "  ( "
+        for p in self.pokemons:
+            trainer1text += p.name + " "
+        for p2 in Trainer2.pokemons:
+            trainer2text += p2.name + " "
+        trainer1text += " )"
+        trainer2text += " )"
+        print(trainer1text)
+        print("-----------------VS----------------")
+        print(trainer2text)
+
+        time.sleep(1)
+
+        # Match loop
+        turn_number = 0
+        while not(self.lost_match()) or not(Trainer2.lost_match()):
+            index1 = index2 = pindex1 = pindex2 = \
+                player1choice = player2choice = -10 #index for move chosen/pokemon swapped reset
+
+            #increment turn number; no Pokemon are flinched in the beginning
+            turn_number += 1
+            self.active_pokemon.flinch = Trainer2.active_pokemon.flinch = False
+
+            # Print turn and pokemon info
+            print("\n_____TURN #" + str(turn_number) + "_____")
+
+            if self.active_pokemon.recharge == -1:
+                #Trainer 1 makes their move
+                player1choice = int(input(self.getpromptstring()))
+                if player1choice == 1:
+                    print("\nMoves for " + self.active_pokemon.name)
+                    for i, x in enumerate(self.active_pokemon.moves):
+                        print(i+1, movejson[x]['name'])
+                    index1 = int(input('Pick a move: '))
+                elif player1choice == 2 and len(self.alive_pokemon) > 1:
+                    pindex1 = self.get_switch_pokemon_choice()
+                else:
+                    print(self.name + ' ran away...took the L')
+                    exit()
+            else:
+                player1choice = 1
+                index1 = 1
+
+            if Trainer2.active_pokemon.recharge == -1:
+                #Trainer 2 makes their move
+                print("Bot Chooses Action to Fight")
+                player2choice = 1
+                if player2choice == 1:
+                    print("\nMoves for " + Trainer2.active_pokemon.name)
+                    for i, x in enumerate(Trainer2.active_pokemon.moves):
+                        print(i+1, movejson[x]['name'])
+
+                    maxIndex = 1
+                    move_used = movejson[Trainer2.active_pokemon.moves[maxIndex-1]]
+                    move_effectiveness1 = typesjson[str(move_used['type'])]['offense'][self.active_pokemon.types[0]]
+                    if len(self.active_pokemon.types) > 1: #compound effectiveness if target has 2 types
+                        move_effectiveness1 *= typesjson[str(move_used['type'])]['offense'][self.active_pokemon.types[1]]
+                    maxdamage = calculate_damage(Trainer2.active_pokemon, self.active_pokemon, move_used, move_effectiveness1)
+                    for i in range(2, 5):
+                        move_used = movejson[Trainer2.active_pokemon.moves[i-1]]
+                        move_effectiveness1 = typesjson[str(move_used['type'])]['offense'][self.active_pokemon.types[0]]
+                        if len(self.active_pokemon.types) > 1: #compound effectiveness if target has 2 types
+                            move_effectiveness1 *= typesjson[str(move_used['type'])]['offense'][self.active_pokemon.types[1]]
+                        damagee = calculate_damage(Trainer2.active_pokemon,  self.active_pokemon, move_used, move_effectiveness1)
+                        if damagee > maxdamage:
+                            maxIndex = i
+                            maxdamage = damagee
+                    index2 = maxIndex
+                    print(f'Picking The SmartGreedy move: {index2}')
+                elif player2choice == 2 and len(Trainer2.alive_pokemon) > 1:
+                    # 1 to be default for Bot
+                    # pindex2 = Trainer2.get_switch_pokemon_choice()
+                    pindex2 = 1
+                else:
+                    print(Trainer2.name + ' ran away...took the L')
+                    exit()
+            else:
+                player2choice = 1
+                index2 = 1
+
+            if player1choice == 2 and player2choice == 2: #both players switch out
+                self.switch_pokemon(pindex1)
+                Trainer2.switch_pokemon(pindex2)
+            elif player1choice == 2: #only player2 attacks
+                self.switch_pokemon(pindex1)
+                Trainer2.smartgreedyattack(self, index2)
+            elif player2choice == 2: #player1 attacks
+                Trainer2.switch_pokemon(pindex2)
+                self.smartgreedyattack(Trainer2, index1)
+            else: #both attacks
+                #if outspeed opponent (for equal priority) or your move has higher priority, you go first. Otherwise opponent goes first. 50/50 if speed tie.
+                pokemon1speed = self.active_pokemon.curspeed * stat_stage_multiplier[self.active_pokemon.speedstage]
+                pokemon2speed = Trainer2.active_pokemon.curspeed * stat_stage_multiplier[Trainer2.active_pokemon.speedstage]
+                if ((movejson[self.active_pokemon.moves[index1-1]]['priority'] == movejson[Trainer2.active_pokemon.moves[index2-1]]['priority']) \
+                    and ((pokemon1speed > pokemon2speed) or (pokemon1speed == pokemon2speed and random.random() > .5))) \
+                    or (movejson[self.active_pokemon.moves[index1-1]]['priority'] > movejson[Trainer2.active_pokemon.moves[index2-1]]['priority']):
+                    #self trainer attacks first; if it kills, then trainer2 can't attack
+                    switch_flag = self.attack(Trainer2, index1)
+                    if switch_flag == 0:
+                        Trainer2.smartgreedyattack(self, index2)
+                else:
+                    #trainer2 attacks first
+                    switch_flag = Trainer2.attack(self, index2)
+                    if switch_flag == 0:
+                        self.smartgreedyattack(Trainer2, index1)
+
+            ### status damage
+            self.active_pokemon.apply_status_damage()
+            Trainer2.active_pokemon.apply_status_damage()
+
+            if self.active_pokemon.check_faint():
+                self.update_fainted_pokemon()
+                if self.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    i = self.get_switch_pokemon_choice()
+                    self.switch_pokemon(i, 1)
+            if Trainer2.active_pokemon.check_faint():
+                Trainer2.update_fainted_pokemon()
+                if Trainer2.lost_match():
+                    print('Match lost placeholder')
+                    quit()
+                else:
+                    # 1 to be default for Bot
+                    # i = Trainer2.get_switch_pokemon_choice()
+                    i = 1
+                    Trainer2.switch_pokemon(i, 1)
+
+
 if __name__ == '__main__':
     with open('moves.json') as json_file:
         movejson = json.load(json_file)
 
     with open('types.json') as json_file:
-        typesjson = json.load(json_file)   
+        typesjson = json.load(json_file)
 
     with open('pokemon.json') as json_file:
-        pokemonjson = json.load(json_file) 
+        pokemonjson = json.load(json_file)
 
 
     # Sample 1.0 --- Sample Pokemon to use (damaging moves only for now)
@@ -1013,16 +1337,33 @@ if __name__ == '__main__':
     Raikou = Pokemon('243', ['85', '411', '326', '242'])
     Deoxys = Pokemon('386', ['354', '58', '53', '412'])
     Marshtomp = Pokemon('259', ['482', '308', '414', '92'])
-    
+
 
     p1 = Dusknoir
     p2 = Weavile
-    #p1.fight(p2) 
+    #p1.fight(p2)
 
     #battle configuration
     team1 = [Marshtomp, Mewtwo, Golem, Blastoise, Beedrill, Pidgeot]
     team2 = [Pikachu, Infernape, Lucario, Sceptile, Snorlax, Charizard]
 
-    garyoak = Trainer(team1, 'Gary')
-    ashketchum = Trainer(team2, 'Ash')
-    garyoak.fight(ashketchum)
+    greedy = False
+    smartgreedy = False
+    baseCode = False
+    # Cofig for greedy approach
+    if greedy
+        garyoak = Trainer(team1, 'Gary')
+        ashketchum = Trainer(team2, 'Ash')
+        garyoak.greedyfight(ashketchum)
+
+    # Config for Smarter greedy
+    if smartgreedy:
+        garyoak = Trainer(team1, 'Gary')
+        ashketchum = Trainer(team2, 'Ash')
+        garyoak.smartgreedyfight(ashketchum)
+
+    # Config for the original baseCode
+    if baseCode:
+        garyoak = Trainer(team1, 'Gary')
+        ashketchum = Trainer(team2, 'Ash')
+        garyoak.fight(ashketchum)
