@@ -784,7 +784,7 @@ class Trainer:
                 self.alive_pokemon.remove(p)
 
     #prompt to get index of pokemon to switch
-    def get_switch_pokemon_choice(self):
+    def get_switch_pokemon_choice(self, RANDOMFLAG=False):
         while True:
             print('Select a Pokemon to switch (enter number): ')
             for n in range(len(self.alive_pokemon)):
@@ -794,7 +794,9 @@ class Trainer:
                     active_string = '\t[[Active Pokemon]]'
                 print(str(n+1) + ': ' + p.name + '\t\t' + str(p.curhealth) + 'HP ' + p.get_status_string() + active_string)
 
-            pindex = int(input('\nPokemon number: '))
+            pindex = 1
+            #pindex = int(input('\nPokemon number: '))
+            
             if self.alive_pokemon[pindex-1] == self.active_pokemon:
                 print('\n------Cannot switch into current active pokemon------')
             else:
@@ -889,12 +891,14 @@ class Trainer:
 
             if Trainer2.active_pokemon.recharge == -1:
                 #Trainer 2 makes their move
-                player2choice = int(input(Trainer2.getpromptstring()))
+                #player2choice = int(input(Trainer2.getpromptstring()))
+                player2choice = 1
                 if player2choice == 1:
                     print("\nMoves for " + Trainer2.active_pokemon.name)
                     for i, x in enumerate(Trainer2.active_pokemon.moves):
                         print(i+1, movejson[x]['name'])
-                    index2 = int(input('Pick a move: '))
+                    # index2 = int(input('Pick a move: '))
+                    index2 = random.randint(1,4)
                 elif player2choice == 2 and len(Trainer2.alive_pokemon) > 1:
                     pindex2 = Trainer2.get_switch_pokemon_choice()
                 else:
