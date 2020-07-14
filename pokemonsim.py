@@ -1349,9 +1349,9 @@ if __name__ == '__main__':
 
     greedy = False
     smartgreedy = False
-    baseCode = False
+    baseCode = True
     # Cofig for greedy approach
-    if greedy
+    if greedy:
         garyoak = Trainer(team1, 'Gary')
         ashketchum = Trainer(team2, 'Ash')
         garyoak.greedyfight(ashketchum)
