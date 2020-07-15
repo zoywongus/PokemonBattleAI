@@ -1,0 +1,956 @@
+-----POKEMONE BATTLE (LVL 50)-----
+Ash ( Blastoise Beedrill Pidgeot Mewtwo Rayquaza Wailord  )
+-----------------VS----------------
+Gary  ( Lugia Lucario Metagross Infernape Snorlax Sceptile  )
+
+_____TURN #1_____
+
+------Ash------  (6/6 Pokemon left)
+Active Pokemon: Blastoise -- Health: 139/139  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Blastoise
+1 Dark Pulse
+2 Aura Sphere
+3 Ice Beam
+4 Hydro Pump
+Picking The GreedyAttack move: 4
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 166/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 2
+Lugia used Psycho Boost
+Did 76HP damage!
+Lugia's special attack harshly fell!
+
+Blastoise used Hydro Pump
+The attack missed!
+
+_____TURN #2_____
+
+------Ash------  (6/6 Pokemon left)
+Active Pokemon: Blastoise -- Health: 63/139  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Blastoise
+1 Dark Pulse
+2 Aura Sphere
+3 Ice Beam
+4 Hydro Pump
+Picking The GreedyAttack move: 4
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 166/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 2
+Lugia used Psycho Boost
+Did 37HP damage!
+Lugia's special attack harshly fell!
+
+Blastoise used Hydro Pump
+Did 44HP damage!
+
+_____TURN #3_____
+
+------Ash------  (6/6 Pokemon left)
+Active Pokemon: Blastoise -- Health: 26/139  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Blastoise
+1 Dark Pulse
+2 Aura Sphere
+3 Ice Beam
+4 Hydro Pump
+Picking The GreedyAttack move: 4
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 122/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 2
+Lugia used Psycho Boost
+Did 27HP damage!
+Lugia's special attack harshly fell!
+
+...Blastoise fainted.
+
+Ash sent out Beedrill!
+
+_____TURN #4_____
+
+------Ash------  (5/6 Pokemon left)
+Active Pokemon: Beedrill -- Health: 125/125  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Beedrill
+1 Poison Jab
+2 Drill Run
+3 Brick Break
+4 Twineedle
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 122/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 2
+Lugia used Psycho Boost
+The attack missed!
+Beedrill used Drill Run
+Move had no effect...
+
+_____TURN #5_____
+
+------Ash------  (5/6 Pokemon left)
+Active Pokemon: Beedrill -- Health: 125/125  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Beedrill
+1 Poison Jab
+2 Drill Run
+3 Brick Break
+4 Twineedle
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 122/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+A critical hit!
+Picking The SmartGreedy move: 1
+Lugia used Aeroblast
+Did 43HP damage!
+Its super effective!
+
+Beedrill used Drill Run
+Move had no effect...
+
+_____TURN #6_____
+
+------Ash------  (5/6 Pokemon left)
+Active Pokemon: Beedrill -- Health: 82/125  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Beedrill
+1 Poison Jab
+2 Drill Run
+3 Brick Break
+4 Twineedle
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 122/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+A critical hit!
+Picking The SmartGreedy move: 1
+Lugia used Aeroblast
+Did 41HP damage!
+Its super effective!
+
+Beedrill used Drill Run
+Move had no effect...
+
+_____TURN #7_____
+
+------Ash------  (5/6 Pokemon left)
+Active Pokemon: Beedrill -- Health: 41/125  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Beedrill
+1 Poison Jab
+2 Drill Run
+3 Brick Break
+4 Twineedle
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 122/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 2
+Lugia used Psycho Boost
+Did 49HP damage!
+Its super effective!
+
+Lugia's special attack harshly fell!
+
+...Beedrill fainted.
+
+Ash sent out Pidgeot!
+
+_____TURN #8_____
+
+------Ash------  (4/6 Pokemon left)
+Active Pokemon: Pidgeot -- Health: 143/143  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Pidgeot
+1 Hurricane
+2 Heat Wave
+3 Steel Wing
+4 Quick Attack
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 122/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 2
+Lugia used Psycho Boost
+Did 32HP damage!
+Lugia's special attack harshly fell!
+
+Pidgeot used Heat Wave
+Did 20HP damage!
+
+_____TURN #9_____
+
+------Ash------  (4/6 Pokemon left)
+Active Pokemon: Pidgeot -- Health: 111/143  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Pidgeot
+1 Hurricane
+2 Heat Wave
+3 Steel Wing
+4 Quick Attack
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 102/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 2
+Lugia used Psycho Boost
+Did 31HP damage!
+Lugia's special attack harshly fell!
+
+Pidgeot used Heat Wave
+Did 21HP damage!
+
+_____TURN #10_____
+
+------Ash------  (4/6 Pokemon left)
+Active Pokemon: Pidgeot -- Health: 80/143  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Pidgeot
+1 Hurricane
+2 Heat Wave
+3 Steel Wing
+4 Quick Attack
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 81/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 2
+Lugia used Psycho Boost
+Did 31HP damage!
+Lugia's special attack harshly fell!
+
+Pidgeot used Heat Wave
+Did 20HP damage!
+
+_____TURN #11_____
+
+------Ash------  (4/6 Pokemon left)
+Active Pokemon: Pidgeot -- Health: 49/143  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Pidgeot
+1 Hurricane
+2 Heat Wave
+3 Steel Wing
+4 Quick Attack
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 61/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 2
+Lugia used Psycho Boost
+Did 32HP damage!
+Lugia's special attack harshly fell!
+
+Pidgeot used Heat Wave
+The attack missed!
+
+_____TURN #12_____
+
+------Ash------  (4/6 Pokemon left)
+Active Pokemon: Pidgeot -- Health: 17/143  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Pidgeot
+1 Hurricane
+2 Heat Wave
+3 Steel Wing
+4 Quick Attack
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 61/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 2
+Lugia used Psycho Boost
+Did 32HP damage!
+Lugia's special attack harshly fell!
+
+...Pidgeot fainted.
+
+Ash sent out Mewtwo!
+
+_____TURN #13_____
+
+------Ash------  (3/6 Pokemon left)
+Active Pokemon: Mewtwo -- Health: 166/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Mewtwo
+1 Psychic
+2 Focus Blast
+3 Fire Blast
+4 Shadow Ball
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 61/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+A critical hit!
+Picking The SmartGreedy move: 1
+Mewtwo used Focus Blast
+Did 13HP damage!
+Its not very effective...
+
+Lugia used Aeroblast
+Did 18HP damage!
+
+_____TURN #14_____
+
+------Ash------  (3/6 Pokemon left)
+Active Pokemon: Mewtwo -- Health: 148/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Mewtwo
+1 Psychic
+2 Focus Blast
+3 Fire Blast
+4 Shadow Ball
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 48/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+A critical hit!
+Picking The SmartGreedy move: 3
+Mewtwo used Focus Blast
+The attack missed!
+Lugia used Signal Beam
+Did 20HP damage!
+Its super effective!
+
+Mewtwo is confused!
+
+_____TURN #15_____
+
+------Ash------  (3/6 Pokemon left)
+Active Pokemon: Mewtwo -- Health: 128/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Mewtwo
+1 Psychic
+2 Focus Blast
+3 Fire Blast
+4 Shadow Ball
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 48/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 3
+Mewtwo is confused!
+Mewtwo used Focus Blast
+Did 13HP damage!
+Its not very effective...
+
+Lugia used Signal Beam
+Did 18HP damage!
+Its super effective!
+
+
+_____TURN #16_____
+
+------Ash------  (3/6 Pokemon left)
+Active Pokemon: Mewtwo -- Health: 110/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Mewtwo
+1 Psychic
+2 Focus Blast
+3 Fire Blast
+4 Shadow Ball
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 35/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 3
+Mewtwo is confused!
+Mewtwo used Focus Blast
+Did 12HP damage!
+Its not very effective...
+
+Lugia used Signal Beam
+Did 18HP damage!
+Its super effective!
+
+
+_____TURN #17_____
+
+------Ash------  (3/6 Pokemon left)
+Active Pokemon: Mewtwo -- Health: 92/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Mewtwo
+1 Psychic
+2 Focus Blast
+3 Fire Blast
+4 Shadow Ball
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 23/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 3
+Mewtwo is confused!
+Mewtwo used Focus Blast
+Did 14HP damage!
+Its not very effective...
+
+Lugia's special defense fell!
+
+Lugia used Signal Beam
+Did 20HP damage!
+Its super effective!
+
+
+_____TURN #18_____
+
+------Ash------  (3/6 Pokemon left)
+Active Pokemon: Mewtwo -- Health: 72/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Mewtwo
+1 Psychic
+2 Focus Blast
+3 Fire Blast
+4 Shadow Ball
+Picking The GreedyAttack move: 2
+
+------Gary------  (6/6 Pokemon left)
+Active Pokemon: Lugia -- Health: 9/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lugia
+1 Aeroblast
+2 Psycho Boost
+3 Signal Beam
+4 Toxic
+Picking The SmartGreedy move: 1
+Mewtwo has snapped out of confusion!
+Mewtwo used Focus Blast
+Did 18HP damage!
+Its not very effective...
+
+...Lugia fainted.
+
+Gary sent out Lucario!
+
+_____TURN #19_____
+
+------Ash------  (3/6 Pokemon left)
+Active Pokemon: Mewtwo -- Health: 72/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Mewtwo
+1 Psychic
+2 Focus Blast
+3 Fire Blast
+4 Shadow Ball
+Picking The GreedyAttack move: 2
+
+------Gary------  (5/6 Pokemon left)
+Active Pokemon: Lucario -- Health: 130/130  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Lucario
+1 Close Combat
+2 Mach Punch
+3 Iron Head
+4 Swords Dance
+Picking The SmartGreedy move: 3
+Mewtwo used Focus Blast
+Did 224HP damage!
+Its super effective!
+
+...Lucario fainted.
+
+Gary sent out Metagross!
+
+_____TURN #20_____
+
+------Ash------  (3/6 Pokemon left)
+Active Pokemon: Mewtwo -- Health: 72/166  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Mewtwo
+1 Psychic
+2 Focus Blast
+3 Fire Blast
+4 Shadow Ball
+Picking The GreedyAttack move: 2
+
+------Gary------  (4/6 Pokemon left)
+Active Pokemon: Metagross -- Health: 140/140  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Metagross
+1 Meteor Mash
+2 Iron Defense
+3 Extrasensory
+4 Metal Claw
+Picking The SmartGreedy move: 1
+Mewtwo used Focus Blast
+The attack missed!
+Metagross used Meteor Mash
+Did 78HP damage!
+Metagross's attack rose!
+
+...Mewtwo fainted.
+
+Ash sent out Rayquaza!
+
+_____TURN #21_____
+
+------Ash------  (2/6 Pokemon left)
+Active Pokemon: Rayquaza -- Health: 165/165  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Rayquaza
+1 Dragon Rush
+2 Air Slash
+3 Sacred Sword
+4 Draco Meteor
+Picking The GreedyAttack move: 4
+
+------Gary------  (4/6 Pokemon left)
+Active Pokemon: Metagross -- Health: 140/140  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Metagross
+1 Meteor Mash
+2 Iron Defense
+3 Extrasensory
+4 Metal Claw
+Picking The SmartGreedy move: 1
+Rayquaza used Draco Meteor
+Did 72HP damage!
+Its not very effective...
+
+Rayquaza's special attack harshly fell!
+
+Metagross used Meteor Mash
+Did 129HP damage!
+
+_____TURN #22_____
+
+------Ash------  (2/6 Pokemon left)
+Active Pokemon: Rayquaza -- Health: 36/165  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Rayquaza
+1 Dragon Rush
+2 Air Slash
+3 Sacred Sword
+4 Draco Meteor
+Picking The GreedyAttack move: 4
+
+------Gary------  (4/6 Pokemon left)
+Active Pokemon: Metagross -- Health: 68/140  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Metagross
+1 Meteor Mash
+2 Iron Defense
+3 Extrasensory
+4 Metal Claw
+Picking The SmartGreedy move: 1
+Rayquaza used Draco Meteor
+Did 34HP damage!
+Its not very effective...
+
+Rayquaza's special attack harshly fell!
+
+Metagross used Meteor Mash
+Did 128HP damage!
+...Rayquaza fainted.
+
+Ash sent out Wailord!
+
+_____TURN #23_____
+
+------Ash------  (1/6 Pokemon left)
+Active Pokemon: Wailord -- Health: 230/230  
+Choose an Action (enter any other option to run away):
+1. Fight
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Wailord
+1 Surf
+2 Aqua Jet
+3 Nasty Plot
+4 Rock Tomb
+Picking The GreedyAttack move: 4
+
+------Gary------  (4/6 Pokemon left)
+Active Pokemon: Metagross -- Health: 34/140  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Metagross
+1 Meteor Mash
+2 Iron Defense
+3 Extrasensory
+4 Metal Claw
+Picking The SmartGreedy move: 1
+Metagross used Meteor Mash
+Did 124HP damage!
+Its not very effective...
+
+Wailord used Rock Tomb
+Did 10HP damage!
+Its not very effective...
+
+Metagross's speed fell!
+
+
+_____TURN #24_____
+
+------Ash------  (1/6 Pokemon left)
+Active Pokemon: Wailord -- Health: 106/230  
+Choose an Action (enter any other option to run away):
+1. Fight
+Enter choice: 
+Bot chooses action to fight
+
+Moves for Wailord
+1 Surf
+2 Aqua Jet
+3 Nasty Plot
+4 Rock Tomb
+Picking The GreedyAttack move: 4
+
+------Gary------  (4/6 Pokemon left)
+Active Pokemon: Metagross -- Health: 24/140  
+Choose an Action (enter any other option to run away):
+1. Fight
+2. Switch Pokemon
+Enter choice: 
+Bot Chooses Action to Fight
+
+Moves for Metagross
+1 Meteor Mash
+2 Iron Defense
+3 Extrasensory
+4 Metal Claw
+Picking The SmartGreedy move: 1
+Wailord used Rock Tomb
+Did 10HP damage!
+Its not very effective...
+
+Metagross's speed fell!
+
+Metagross used Meteor Mash
+Did 110HP damage!
+Its not very effective...
+
+...Wailord fainted.
+Match lost placeholder
